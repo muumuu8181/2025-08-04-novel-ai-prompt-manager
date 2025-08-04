@@ -150,20 +150,31 @@
             border-color: #4A90E2;
         }
 
-        .copy-btn {
-            margin-top: 8px;
-            padding: 6px 12px;
+        .input-with-button {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .input-with-button textarea {
+            flex: 1;
+        }
+
+        .copy-btn-side {
+            padding: 8px 12px;
             background: linear-gradient(45deg, #28a745, #20c997);
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
-            width: 100%;
+            min-width: 40px;
+            height: 40px;
+            margin-top: 2px;
         }
 
-        .copy-btn:hover {
+        .copy-btn-side:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
@@ -355,66 +366,69 @@
 
         .prompt-list {
             display: grid;
-            gap: 20px;
+            gap: 8px;
         }
 
         .prompt-item {
-            background: #f8f9fa;
+            background: white;
             border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.2s;
         }
 
         .prompt-item:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
         }
 
-        .prompt-header {
+        .prompt-content-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 10px;
         }
 
-        .prompt-date {
-            color: #6c757d;
-            font-size: 0.9rem;
+        .prompt-info {
+            flex: 1;
         }
 
-        .prompt-tags {
-            display: flex;
-            gap: 6px;
-        }
-
-        .prompt-content-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .prompt-summary {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #4A90E2;
-            margin-bottom: 10px;
-        }
-
-        .prompt-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .prompt-preview {
+        .prompt-meta {
+            font-size: 11px;
             color: #666;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            margin-bottom: 4px;
         }
+
+        .mini-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            margin-left: 4px;
+        }
+
+        .prompt-title-line {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        .btn-delete {
+            padding: 6px 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
 
         .prompt-content {
             background: white;
@@ -508,7 +522,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.23</div>
+        <div class="version-badge">v0.24</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
@@ -525,27 +539,35 @@
             <div class="prompt-input-grid">
                 <div class="input-section main-prompt-section">
                     <h3>🌟 メインプロンプト</h3>
-                    <textarea id="mainPrompt" class="main-prompt" placeholder="背景、設定、品質指定など...&#10;&#10;例：&#10;beautiful landscape, detailed background, high quality, masterpiece, 8k resolution, studio lighting"></textarea>
-                    <button onclick="copyIndividualPrompt('main')" class="copy-btn">📋 メインコピー</button>
+                    <div class="input-with-button">
+                        <textarea id="mainPrompt" class="main-prompt" placeholder="背景、設定、品質指定など...&#10;&#10;例：&#10;beautiful landscape, detailed background, high quality, masterpiece, 8k resolution, studio lighting"></textarea>
+                        <button onclick="copyIndividualPrompt('main')" class="copy-btn-side">📋</button>
+                    </div>
                 </div>
                 
                 <div class="character-grid">
                     <div class="input-section character-section">
                         <h3>👤 1人目</h3>
-                        <textarea id="character1" class="character-prompt" placeholder="1人目のキャラクター詳細...&#10;&#10;例：&#10;anime girl, long blue hair, green eyes, school uniform"></textarea>
-                        <button onclick="copyIndividualPrompt('char1')" class="copy-btn">📋 1人目コピー</button>
+                        <div class="input-with-button">
+                            <textarea id="character1" class="character-prompt" placeholder="1人目のキャラクター詳細...&#10;&#10;例：&#10;anime girl, long blue hair, green eyes, school uniform"></textarea>
+                            <button onclick="copyIndividualPrompt('char1')" class="copy-btn-side">📋</button>
+                        </div>
                     </div>
                     
                     <div class="input-section character-section">
                         <h3>👥 2人目</h3>
-                        <textarea id="character2" class="character-prompt" placeholder="2人目のキャラクター詳細...&#10;&#10;例：&#10;anime boy, short black hair, brown eyes, casual clothes"></textarea>
-                        <button onclick="copyIndividualPrompt('char2')" class="copy-btn">📋 2人目コピー</button>
+                        <div class="input-with-button">
+                            <textarea id="character2" class="character-prompt" placeholder="2人目のキャラクター詳細...&#10;&#10;例：&#10;anime boy, short black hair, brown eyes, casual clothes"></textarea>
+                            <button onclick="copyIndividualPrompt('char2')" class="copy-btn-side">📋</button>
+                        </div>
                     </div>
                     
                     <div class="input-section character-section">
                         <h3>👥+ 3〜6人目</h3>
-                        <textarea id="character3to6" class="character-prompt" placeholder="3〜6人目の追加キャラクター...&#10;&#10;例：&#10;background characters, crowd, various people"></textarea>
-                        <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn">📋 3〜6人目コピー</button>
+                        <div class="input-with-button">
+                            <textarea id="character3to6" class="character-prompt" placeholder="3〜6人目の追加キャラクター...&#10;&#10;例：&#10;background characters, crowd, various people"></textarea>
+                            <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn-side">📋</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -858,25 +880,18 @@
 
             container.innerHTML = filteredPrompts.map(prompt => `
                 <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-date">
-                            📅 ${formatDateTime(prompt.timestamp)} 
-                            ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : '✏️'}
+                    <div class="prompt-content-row">
+                        <div class="prompt-info" onclick="restorePromptToInputs('${prompt.id}')" style="cursor: pointer;">
+                            <div class="prompt-meta">
+                                📅 ${formatDateTime(prompt.timestamp)} 
+                                ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : '✏️'}
+                                ${prompt.tags.map(tag => `<span class="mini-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="prompt-title-line">
+                                <strong>${highlightSearch(prompt.title || '無題')}</strong> - ${highlightSearch(truncateText(prompt.mainPrompt, 50))}
+                            </div>
                         </div>
-                        <div class="prompt-tags">
-                            ${prompt.tags.map(tag => `<span class="tag-item">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="prompt-summary">
-                        <div class="prompt-title">${highlightSearch(prompt.title || '無題')}</div>
-                        <div class="prompt-preview">${highlightSearch(truncateText(prompt.mainPrompt, 30))}</div>
-                    </div>
-                    
-                    <div class="prompt-actions">
-                        <button onclick="restorePromptToInputs('${prompt.id}')" class="btn-primary btn-small">📝 入力欄に復元</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-secondary btn-small">📋 メインコピー</button>
-                        <button onclick="deletePrompt('${prompt.id}')" class="btn-info btn-small">🗑️ 削除</button>
+                        <button onclick="deletePrompt('${prompt.id}')" class="btn-delete">🗑️</button>
                     </div>
                 </div>
             `).join('');
