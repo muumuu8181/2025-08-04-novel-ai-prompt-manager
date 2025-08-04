@@ -137,6 +137,16 @@
             font-family: inherit;
         }
 
+        textarea::placeholder {
+            color: #f0f0f0;
+            opacity: 0.3;
+        }
+
+        input::placeholder {
+            color: #f0f0f0;
+            opacity: 0.3;
+        }
+
         .main-prompt {
             min-height: 120px;
         }
@@ -192,7 +202,213 @@
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: center;
+        }
+
+        .save-and-clear-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .save-buttons {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .btn-save {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 150px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-clear {
+            padding: 12px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+
+        .btn-clear:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .title-input-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .title-input-row h3 {
+            margin: 0;
+            min-width: 140px;
+            font-size: 1rem;
+        }
+
+        .title-input-row .title-input {
+            flex: 1;
+        }
+
+        .potion-preview {
+            background: #f8f9fa;
+            border: 2px dashed #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+            min-height: 120px;
+        }
+
+        .potion-preview-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .potion-preview-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 3px solid #28a745;
+            flex-shrink: 0;
+        }
+
+        .potion-preview-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 120px;
+            justify-content: center;
+        }
+
+        .potion-preview-info span {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 16px;
+            word-break: break-word;
+        }
+
+        .btn-remove-potion {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: all 0.3s;
+        }
+
+        .btn-remove-potion:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .debug-panel {
+            background: white;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #17a2b8;
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #17a2b8;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .debug-header h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .debug-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-copy-logs, .btn-clear-logs {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-copy-logs {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-copy-logs:hover {
+            background: #218838;
+        }
+
+        .btn-clear-logs {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear-logs:hover {
+            background: #c82333;
+        }
+
+        .debug-logs {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .debug-log-entry {
+            margin-bottom: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .debug-log-info {
+            background: #e3f2fd;
+            border-left: 3px solid #2196f3;
+        }
+
+        .debug-log-success {
+            background: #e8f5e8;
+            border-left: 3px solid #4caf50;
+        }
+
+        .debug-log-error {
+            background: #ffebee;
+            border-left: 3px solid #f44336;
+        }
+
+        .debug-log-warn {
+            background: #fff3e0;
+            border-left: 3px solid #ff9800;
         }
 
         .btn-large {
@@ -212,7 +428,7 @@
         }
 
         .btn-search {
-            padding: 8px 12px;
+            padding: 8px 10px;
             background: #007bff;
             color: white;
             border: none;
@@ -220,6 +436,7 @@
             cursor: pointer;
             font-size: 14px;
             transition: all 0.2s;
+            min-width: 40px;
         }
 
         .btn-search:hover {
@@ -316,30 +533,57 @@
         }
 
         .search-filter-section {
-            display: flex;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
             margin-bottom: 20px;
-            align-items: end;
+        }
+
+        .search-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-section h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1rem;
         }
 
         .search-input {
-            flex: 2;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .tag-filter {
             flex: 1;
-        }
-
-        .tag-filter select {
-            width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
+        }
+
+        .tag-filter-below {
+            margin-top: 10px;
+        }
+
+        .tag-filter-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+
+        .potion-input-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .potion-input-section h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1rem;
         }
 
         .button-group {
@@ -435,8 +679,46 @@
             gap: 10px;
         }
 
+        .prompt-image-main {
+            flex-shrink: 0;
+        }
+
+        .prompt-main-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
         .prompt-info {
             flex: 1;
+        }
+
+        .prompt-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .prompt-thumbnail {
+            display: flex;
+            align-items: center;
+        }
+
+        .thumbnail-image {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #28a745;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .thumbnail-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
         }
 
         .prompt-meta {
@@ -452,6 +734,12 @@
             border-radius: 8px;
             font-size: 10px;
             margin-left: 4px;
+        }
+
+        .mini-tag.potion-name {
+            background: #e8f5e8;
+            color: #2e7d32;
+            font-weight: bold;
         }
 
         .prompt-title-line {
@@ -492,11 +780,6 @@
             border-left-color: #28a745;
         }
 
-        .prompt-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
 
         .btn-small {
             padding: 6px 12px;
@@ -514,13 +797,6 @@
             background-color: #ffeb3b;
             padding: 2px 4px;
             border-radius: 3px;
-        }
-
-        .file-input-section {
-            margin-top: 15px;
-            padding: 15px;
-            background: #e3f2fd;
-            border-radius: 8px;
         }
 
         .file-input {
@@ -546,7 +822,61 @@
 
         @media (max-width: 768px) {
             .search-filter-section {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .save-and-clear-section {
                 flex-direction: column;
+                gap: 10px;
+            }
+            
+            .save-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn-save {
+                max-width: none;
+            }
+            
+            .btn-clear {
+                align-self: stretch;
+            }
+            
+            .title-input-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .title-input-row h3 {
+                min-width: auto;
+                text-align: center;
+            }
+            
+            .potion-preview-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .potion-preview-img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .potion-preview-info {
+                min-height: auto;
+            }
+            
+            .prompt-main-image {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .thumbnail-image {
+                width: 24px;
+                height: 24px;
             }
             
             .button-group {
@@ -569,7 +899,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.25</div>
+        <div class="version-badge">v0.4</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
@@ -578,8 +908,10 @@
         <div class="controls">
             <!-- タイトル入力エリア -->
             <div class="title-section">
-                <h3>📝 プロンプトタイトル</h3>
-                <input type="text" id="promptTitle" class="title-input" placeholder="プロンプトにタイトルを付けてください（例: 森の中の美少女、戦闘シーンなど）" maxlength="50">
+                <div class="title-input-row">
+                    <h3>📝 プロンプトタイトル</h3>
+                    <input type="text" id="promptTitle" class="title-input" placeholder="プロンプトにタイトルを付けてください（例: 森の中の美少女、戦闘シーンなど）" maxlength="50">
+                </div>
             </div>
 
             <!-- プロンプト入力エリア -->
@@ -621,7 +953,22 @@
 
             <!-- プロンプト保存 -->
             <div class="save-section">
-                <button onclick="savePrompt()" class="btn-primary btn-large">💾 プロンプト保存</button>
+                <div class="save-and-clear-section">
+                    <div class="save-buttons">
+                        <button onclick="savePrompt('new')" class="btn-primary btn-save">💾 新規保存</button>
+                        <button onclick="savePrompt('overwrite')" class="btn-secondary btn-save" id="overwriteBtn" style="display: none;">📝 上書き保存</button>
+                    </div>
+                    <button onclick="clearAllInputs()" class="btn-clear">🧹 クリア</button>
+                </div>
+                <div id="potionPreview" class="potion-preview" style="display: none;">
+                    <div class="potion-preview-content">
+                        <img id="potionPreviewImage" src="" alt="ポーション画像" class="potion-preview-img">
+                        <div class="potion-preview-info">
+                            <span id="potionPreviewName">ポーション名</span>
+                            <button onclick="removePotionData()" class="btn-remove-potion">🗑️ 削除</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- タグ管理セクション -->
@@ -643,23 +990,21 @@
 
             <!-- 検索・フィルター -->
             <div class="search-filter-section">
-                <div style="flex: 2;">
+                <div class="search-section">
                     <h4>🔍 キーワード検索</h4>
                     <div class="search-input-group">
                         <input type="text" id="searchInput" class="search-input" placeholder="プロンプト内容で検索...">
                         <button onclick="performSearch()" class="btn-search">🔍</button>
                     </div>
+                    <div class="tag-filter-below">
+                        <select id="tagFilter" class="tag-filter-select">
+                            <option value="">🏷️ 全てのタグ</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="tag-filter">
-                    <h4>🏷️ タグフィルター</h4>
-                    <select id="tagFilter">
-                        <option value="">全てのタグ</option>
-                    </select>
-                </div>
-                <div class="file-input-section">
-                    <h4>📁 外部ファイル</h4>
-                    <input type="file" id="fileInput" class="file-input" accept=".txt" multiple>
-                    <button onclick="loadExternalFiles()" class="btn-info btn-small">読み込み</button>
+                <div class="potion-input-section">
+                    <h4>🧪 ポーション</h4>
+                    <input type="file" id="potionInput" class="file-input" accept=".txt,.json,.png,.jpg,.jpeg" multiple onchange="loadPotions()">
                 </div>
             </div>
 
@@ -668,6 +1013,19 @@
                 <button onclick="exportData()" class="btn-info">📤 エクスポート</button>
                 <button onclick="importData()" class="btn-info">📥 インポート</button>
                 <button onclick="clearAll()" class="btn-secondary">🗑️ 全削除</button>
+                <button onclick="toggleDebugPanel()" class="btn-info">🔍 デバッグ</button>
+            </div>
+
+            <!-- デバッグパネル -->
+            <div id="debugPanel" class="debug-panel" style="display: none;">
+                <div class="debug-header">
+                    <h4>🔍 デバッグログ</h4>
+                    <div class="debug-buttons">
+                        <button onclick="copyDebugLogs()" class="btn-copy-logs">📋 コピー</button>
+                        <button onclick="clearDebugLogs()" class="btn-clear-logs">🗑️ クリア</button>
+                    </div>
+                </div>
+                <div id="debugLogs" class="debug-logs"></div>
             </div>
         </div>
 
@@ -708,6 +1066,8 @@
         let currentTags = new Set();
         let currentSearch = '';
         let currentTagFilter = '';
+        let currentEditingId = null; // 現在編集中のプロンプトID
+        let debugLogs = []; // デバッグログ保存用
 
         // ページ読み込み時の初期化
         window.onload = function() {
@@ -844,7 +1204,7 @@
         }
 
         // プロンプトの保存
-        function savePrompt() {
+        function savePrompt(mode = 'new') {
             const title = document.getElementById('promptTitle').value.trim();
             const mainPrompt = document.getElementById('mainPrompt').value.trim();
             
@@ -858,8 +1218,7 @@
                 return;
             }
 
-            const prompt = {
-                id: Date.now(),
+            const promptData = {
                 title: title,
                 mainPrompt: mainPrompt,
                 character1: document.getElementById('character1').value.trim(),
@@ -867,10 +1226,41 @@
                 character3to6: document.getElementById('character3to6').value.trim(),
                 tags: Array.from(currentTags),
                 timestamp: new Date(),
-                source: 'manual'
+                source: window.currentPotionData ? 'potion' : 'manual'
             };
 
-            prompts.unshift(prompt);
+            // ポーション情報がある場合は追加
+            if (window.currentPotionData) {
+                promptData.image = window.currentPotionData.image;
+                promptData.imageName = window.currentPotionData.imageName;
+                promptData.potionName = window.currentPotionData.potionName;
+                // ポーションタグを追加
+                if (!promptData.tags.includes('ポーション')) {
+                    promptData.tags.push('ポーション');
+                    currentTags.add('ポーション');
+                }
+            }
+
+            if (mode === 'overwrite' && currentEditingId) {
+                // 上書き保存
+                const index = prompts.findIndex(p => p.id == currentEditingId);
+                if (index !== -1) {
+                    promptData.id = currentEditingId;
+                    promptData.originalTimestamp = prompts[index].timestamp; // 元の作成日時を保持
+                    prompts[index] = promptData;
+                    showNotification('プロンプトを上書き保存しました！');
+                } else {
+                    // 元のプロンプトが見つからない場合は新規保存
+                    promptData.id = Date.now();
+                    prompts.unshift(promptData);
+                    showNotification('プロンプトを新規保存しました！');
+                }
+            } else {
+                // 新規保存
+                promptData.id = Date.now();
+                prompts.unshift(promptData);
+                showNotification('プロンプトを新規保存しました！');
+            }
             
             // タグをグローバルセットに追加
             currentTags.forEach(tag => allTags.add(tag));
@@ -880,8 +1270,7 @@
             displayPrompts();
             updateStats();
             updateTagsDisplay();
-            
-            showNotification('プロンプトが保存されました！');
+            updateSaveButtons();
         }
 
         // 入力フィールドのクリア
@@ -892,6 +1281,11 @@
             document.getElementById('character2').value = '';
             document.getElementById('character3to6').value = '';
             currentTags.clear();
+            // ポーション情報もクリア
+            window.currentPotionData = null;
+            currentEditingId = null;
+            updatePotionPreview();
+            updateSaveButtons();
         }
 
         // クリップボードから保存
@@ -948,17 +1342,22 @@
             container.innerHTML = filteredPrompts.map(prompt => `
                 <div class="prompt-item">
                     <div class="prompt-content-row">
+                        ${prompt.image ? `<div class="prompt-image-main"><img src="${prompt.image}" alt="${prompt.imageName || 'ポーション画像'}" class="prompt-main-image"></div>` : ''}
                         <div class="prompt-info" onclick="restorePromptToInputs('${prompt.id}')" style="cursor: pointer;">
                             <div class="prompt-meta">
                                 📅 ${formatDateTime(prompt.timestamp)} 
-                                ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : '✏️'}
+                                ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : prompt.source === 'potion' ? '🧪' : '✏️'}
                                 ${prompt.tags.map(tag => `<span class="mini-tag">${tag}</span>`).join('')}
+                                ${prompt.potionName ? `<span class="mini-tag potion-name">🧪 ${prompt.potionName}</span>` : ''}
                             </div>
                             <div class="prompt-title-line">
                                 <strong>${highlightSearch(prompt.title || '無題')}</strong> - ${highlightSearch(truncateText(prompt.mainPrompt, 50))}
                             </div>
                         </div>
-                        <button onclick="deletePrompt('${prompt.id}')" class="btn-delete">🗑️</button>
+                        <div class="prompt-actions">
+                            ${prompt.image ? `<div class="prompt-thumbnail"><img src="${prompt.image}" alt="${prompt.imageName || 'ポーション画像'}" class="thumbnail-image" title="${prompt.potionName || prompt.imageName || 'ポーション画像'}"></div>` : ''}
+                            <button onclick="deletePrompt('${prompt.id}')" class="btn-delete">🗑️</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -1053,8 +1452,26 @@
             }
             updateTagsDisplay();
             
+            // 編集モードを設定
+            currentEditingId = id;
+            
+            // ポーション情報がある場合は一時保存
+            if (prompt.source === 'potion' || prompt.image) {
+                window.currentPotionData = {
+                    image: prompt.image,
+                    imageName: prompt.imageName,
+                    potionName: prompt.potionName
+                };
+            } else {
+                window.currentPotionData = null;
+            }
+            
+            // UI更新
+            updatePotionPreview();
+            updateSaveButtons();
+            
             // 成功メッセージ
-            showNotification(`"${prompt.title || '無題'}" を入力欄に復元しました！`);
+            showNotification(`"${prompt.title || '無題'}" を編集モードで復元しました！${prompt.source === 'potion' ? ' 🧪' : ''}`);
             
             // 入力エリアまでスクロール
             document.querySelector('.title-section').scrollIntoView({ behavior: 'smooth' });
@@ -1098,55 +1515,334 @@
             document.getElementById('tagCount').textContent = allTags.size;
         }
 
-        // 外部ファイルの読み込み
-        function loadExternalFiles() {
-            const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
+        // ポーションの読み込み
+        function loadPotions() {
+            const potionInput = document.getElementById('potionInput');
+            const files = potionInput.files;
+
+            debugLog('=== ポーション読み込み開始 ===', 'info');
+            debugLog('選択されたファイル数: ' + files.length, 'info');
 
             if (files.length === 0) {
-                alert('ファイルを選択してください');
+                debugLog('ファイルが選択されていません', 'error');
+                alert('ポーションファイルを選択してください');
                 return;
             }
 
             let loadedCount = 0;
+            const totalFiles = files.length; // ファイル数を事前に保存
+            const potionData = {};
+
             Array.from(files).forEach(file => {
-                if (file.type !== 'text/plain') {
-                    alert(`${file.name} はテキストファイルではありません`);
-                    return;
-                }
-
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const content = e.target.result.trim();
-                    if (content) {
-                        const prompt = {
-                            id: Date.now() + Math.random(),
-                            title: file.name.replace('.txt', '') || content.substring(0, 30) + '...',
-                            mainPrompt: content,
-                            character1: '',
-                            character2: '',
-                            character3to6: '',
-                            tags: [],
-                            timestamp: new Date(),
-                            source: 'file',
-                            filename: file.name
-                        };
-
-                        prompts.unshift(prompt);
-                        loadedCount++;
-                        
-                        if (loadedCount === files.length) {
-                            savePrompts();
-                            displayPrompts();
-                            updateStats();
-                            showNotification(`${loadedCount}個のファイルを読み込みました！`);
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                
+                debugLog('ファイル処理開始: ' + file.name + ' (タイプ: ' + fileExt + ')', 'info');
+                
+                if (['png', 'jpg', 'jpeg'].includes(fileExt)) {
+                    // 画像ファイルの場合
+                    debugLog('画像ファイルとして読み込み: ' + file.name, 'info');
+                    reader.onload = function(e) {
+                        const baseName = file.name.replace(/\.(png|jpg|jpeg)$/i, '');
+                        if (!potionData[baseName]) {
+                            potionData[baseName] = {};
                         }
+                        potionData[baseName].image = e.target.result;
+                        potionData[baseName].imageName = file.name;
+                        
+                        debugLog('画像データ読み込み完了: ' + baseName, 'success');
+                        debugLog('画像データサイズ: ' + Math.round(e.target.result.length / 1024) + 'KB', 'info');
+                        
+                        loadedCount++;
+                        debugLog('読み込み完了カウント: ' + loadedCount + '/' + totalFiles, 'info');
+                        if (loadedCount === totalFiles) {
+                            debugLog('全ファイル読み込み完了、processPotionData呼び出し', 'info');
+                            processPotionData(potionData);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                } else if (['txt', 'json'].includes(fileExt)) {
+                    // テキスト/JSONファイルの場合
+                    debugLog('テキストファイルとして読み込み: ' + file.name, 'info');
+                    reader.onload = function(e) {
+                        const baseName = file.name.replace(/\.(txt|json)$/i, '');
+                        if (!potionData[baseName]) {
+                            potionData[baseName] = {};
+                        }
+                        
+                        let content;
+                        if (fileExt === 'json') {
+                            try {
+                                const jsonData = JSON.parse(e.target.result);
+                                content = jsonData.prompt || jsonData.text || JSON.stringify(jsonData, null, 2);
+                                debugLog('JSON解析成功: ' + baseName, 'success');
+                            } catch (err) {
+                                content = e.target.result;
+                                debugLog('JSON解析失敗、テキストとして処理: ' + baseName, 'warn');
+                            }
+                        } else {
+                            content = e.target.result;
+                        }
+                        
+                        potionData[baseName].content = content.trim();
+                        potionData[baseName].textName = file.name;
+                        
+                        debugLog('テキストデータ読み込み完了: ' + baseName, 'success');
+                        debugLog('テキスト文字数: ' + content.trim().length + '文字', 'info');
+                        
+                        loadedCount++;
+                        if (loadedCount === totalFiles) {
+                            processPotionData(potionData);
+                        }
+                    };
+                    reader.readAsText(file, 'UTF-8');
+                } else {
+                    debugLog('サポート外のファイル形式: ' + file.name, 'error');
+                    alert(`${file.name} はサポートされていないファイル形式です`);
+                    loadedCount++;
+                    if (loadedCount === totalFiles) {
+                        processPotionData(potionData);
                     }
-                };
-                reader.readAsText(file, 'UTF-8');
+                }
             });
 
-            fileInput.value = '';
+            potionInput.value = '';
+        }
+
+        // ポーションデータの処理
+        function processPotionData(potionData) {
+            debugLog('=== ポーションデータ処理開始 ===', 'info');
+            debugLog('処理対象ポーション数: ' + Object.keys(potionData).length, 'info');
+            
+            let processedCount = 0;
+            
+            Object.keys(potionData).forEach(baseName => {
+                const potion = potionData[baseName];
+                debugLog('ポーション処理中: ' + baseName, 'info');
+                debugLog('- テキスト: ' + (potion.content ? 'あり' : 'なし'), 'info');
+                debugLog('- 画像: ' + (potion.image ? 'あり' : 'なし'), 'info');
+                
+                // テキストがある場合はプロンプトとして保存
+                if (potion.content) {
+                    const prompt = {
+                        id: Date.now() + Math.random(),
+                        title: baseName || (potion.content.substring(0, 30) + '...'),
+                        mainPrompt: potion.content,
+                        character1: '',
+                        character2: '',
+                        character3to6: '',
+                        tags: ['ポーション'],
+                        timestamp: new Date(),
+                        source: 'potion',
+                        potionName: baseName,
+                        image: potion.image,
+                        imageName: potion.imageName,
+                        textName: potion.textName
+                    };
+
+                    prompts.unshift(prompt);
+                    processedCount++;
+                    debugLog('ポーションをプロンプトとして追加: ' + baseName, 'success');
+                }
+                
+                // 画像のみの場合は入力欄にプレビュー表示
+                if (potion.image && !potion.content) {
+                    debugLog('画像のみのポーション検出: ' + baseName, 'info');
+                    window.currentPotionData = {
+                        image: potion.image,
+                        imageName: potion.imageName,
+                        potionName: baseName
+                    };
+                    debugLog('currentPotionData設定完了', 'success');
+                    debugLog('画像データ先頭確認: ' + potion.image.substring(0, 30) + '...', 'info');
+                    updatePotionPreview();
+                    debugLog('updatePotionPreview呼び出し完了', 'success');
+                }
+            });
+            
+            debugLog('処理完了数: ' + processedCount, 'info');
+            
+            if (processedCount > 0) {
+                // ポーションタグをグローバルタグに追加
+                allTags.add('ポーション');
+                
+                // 最初のポーションを入力欄に自動設定してプレビュー表示
+                if (processedCount === 1) {
+                    debugLog('単一ポーションを入力欄に自動設定', 'info');
+                    const firstPotionName = Object.keys(potionData)[0];
+                    const firstPotion = potionData[firstPotionName];
+                    
+                    document.getElementById('promptTitle').value = firstPotionName;
+                    document.getElementById('mainPrompt').value = firstPotion.content;
+                    
+                    if (firstPotion.image) {
+                        window.currentPotionData = {
+                            image: firstPotion.image,
+                            imageName: firstPotion.imageName,
+                            potionName: firstPotionName
+                        };
+                        debugLog('自動設定されたポーション: ' + firstPotionName, 'success');
+                        updatePotionPreview();
+                    }
+                }
+                
+                savePrompts();
+                displayPrompts();
+                updateStats();
+                updateTagsDisplay();
+                showNotification(`${processedCount}個のポーションを読み込みました！🧪`);
+                debugLog('ポーション読み込み成功: ' + processedCount + '個', 'success');
+            } else {
+                showNotification('読み込み可能なポーションが見つかりませんでした');
+                debugLog('読み込み可能なポーションが見つからない', 'warn');
+            }
+            
+            debugLog('=== ポーションデータ処理終了 ===', 'info');
+        }
+
+        // ポーションプレビューの更新
+        function updatePotionPreview() {
+            const preview = document.getElementById('potionPreview');
+            const previewImage = document.getElementById('potionPreviewImage');
+            const previewName = document.getElementById('potionPreviewName');
+            
+            debugLog('=== updatePotionPreview 開始 ===', 'info');
+            debugLog('currentPotionData: ' + (window.currentPotionData ? 'あり' : 'なし'), 'info');
+            debugLog('preview要素: ' + (preview ? 'OK' : 'NG'), 'info');
+            debugLog('previewImage要素: ' + (previewImage ? 'OK' : 'NG'), 'info');
+            
+            if (window.currentPotionData && window.currentPotionData.image) {
+                const imageData = window.currentPotionData.image;
+                debugLog('画像データあり', 'info');
+                debugLog('画像データ先頭: ' + imageData.substring(0, 50) + '...', 'info');
+                debugLog('画像データタイプ: ' + (imageData.startsWith('data:') ? 'base64' : 'その他'), 'info');
+                
+                // 強制的に画像を表示
+                previewImage.src = imageData;
+                previewImage.style.display = 'block';
+                previewImage.style.visibility = 'visible';
+                previewImage.style.opacity = '1';
+                
+                previewName.textContent = window.currentPotionData.potionName || window.currentPotionData.imageName || 'ポーション';
+                preview.style.display = 'block';
+                
+                debugLog('画像src設定完了', 'success');
+                
+                // 画像読み込み成功時
+                previewImage.onload = function() {
+                    debugLog('✅ ポーション画像読み込み成功！ サイズ: ' + this.naturalWidth + 'x' + this.naturalHeight, 'success');
+                };
+                
+                // 画像読み込みエラーハンドリング
+                previewImage.onerror = function() {
+                    debugLog('❌ ポーション画像の読み込みに失敗', 'error');
+                    debugLog('画像データ: ' + imageData.substring(0, 100) + '...', 'error');
+                    previewName.textContent = '画像読み込みエラー - ' + (window.currentPotionData.imageName || 'unknown');
+                };
+                
+                // 即座に状態をチェック
+                setTimeout(() => {
+                    debugLog('1秒後のチェック:', 'info');
+                    debugLog('- complete: ' + previewImage.complete, 'info');
+                    debugLog('- naturalWidth: ' + previewImage.naturalWidth, 'info');
+                    debugLog('- display: ' + previewImage.style.display, 'info');
+                }, 1000);
+                
+            } else {
+                debugLog('❌ ポーション情報なし、プレビュー非表示', 'warn');
+                preview.style.display = 'none';
+            }
+            
+            debugLog('=== updatePotionPreview 終了 ===', 'info');
+        }
+
+        // 保存ボタンの更新
+        function updateSaveButtons() {
+            const overwriteBtn = document.getElementById('overwriteBtn');
+            
+            if (currentEditingId) {
+                overwriteBtn.style.display = 'block';
+            } else {
+                overwriteBtn.style.display = 'none';
+            }
+        }
+
+        // ポーションデータの削除
+        function removePotionData() {
+            window.currentPotionData = null;
+            updatePotionPreview();
+            showNotification('ポーション情報を削除しました');
+        }
+
+        // 全入力内容のクリア
+        function clearAllInputs() {
+            clearInputs();
+            updateTagsDisplay();
+        }
+
+        // デバッグログ関数
+        function debugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = {
+                time: timestamp,
+                message: message,
+                type: type
+            };
+            debugLogs.push(logEntry);
+            
+            // ログが多すぎる場合は古いものを削除
+            if (debugLogs.length > 100) {
+                debugLogs = debugLogs.slice(-50);
+            }
+            
+            updateDebugDisplay();
+        }
+
+        // デバッグパネルの表示/非表示切り替え
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                debugLog('デバッグパネルを開きました', 'info');
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // デバッグログの表示更新
+        function updateDebugDisplay() {
+            const logsContainer = document.getElementById('debugLogs');
+            if (!logsContainer) return;
+            
+            logsContainer.innerHTML = debugLogs.map(log => 
+                `<div class="debug-log-entry debug-log-${log.type}">
+                    <strong>[${log.time}]</strong> ${log.message}
+                </div>`
+            ).join('');
+            
+            // 最新のログまでスクロール
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // デバッグログのコピー
+        async function copyDebugLogs() {
+            const logText = debugLogs.map(log => 
+                `[${log.time}] ${log.type.toUpperCase()}: ${log.message}`
+            ).join('\n');
+            
+            try {
+                await navigator.clipboard.writeText(logText);
+                debugLog('ログをクリップボードにコピーしました', 'success');
+            } catch (err) {
+                debugLog('ログのコピーに失敗しました: ' + err.message, 'error');
+            }
+        }
+
+        // デバッグログのクリア
+        function clearDebugLogs() {
+            debugLogs = [];
+            updateDebugDisplay();
+            debugLog('ログをクリアしました', 'info');
         }
 
         // データのエクスポート
