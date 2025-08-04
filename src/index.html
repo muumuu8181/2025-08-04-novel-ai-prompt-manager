@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 700px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -476,19 +476,6 @@
             border-top: 1px solid #e9ecef;
         }
 
-        .detail-copy-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .detail-copy-buttons h4 {
-            width: 100%;
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 1rem;
-        }
 
         @media (max-width: 768px) {
             .character-grid {
@@ -521,7 +508,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.22</div>
+        <div class="version-badge">v0.23</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
@@ -887,38 +874,9 @@
                     </div>
                     
                     <div class="prompt-actions">
-                        <button onclick="togglePromptDetails('${prompt.id}')" class="btn-info btn-small">📖 詳細表示</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-primary btn-small">📋 メインコピー</button>
+                        <button onclick="restorePromptToInputs('${prompt.id}')" class="btn-primary btn-small">📝 入力欄に復元</button>
+                        <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-secondary btn-small">📋 メインコピー</button>
                         <button onclick="deletePrompt('${prompt.id}')" class="btn-info btn-small">🗑️ 削除</button>
-                    </div>
-                    
-                    <div id="details-${prompt.id}" class="prompt-details" style="display: none;">
-                        <h4>📋 個別コピー機能：</h4>
-                        <div class="detail-copy-buttons">
-                            <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-primary btn-small">📋 メインプロンプト</button>
-                            ${prompt.character1 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char1')" class="btn-secondary btn-small">📋 1人目</button>` : ''}
-                            ${prompt.character2 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char2')" class="btn-secondary btn-small">📋 2人目</button>` : ''}
-                            ${prompt.character3to6 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char3to6')" class="btn-secondary btn-small">📋 3〜6人目</button>` : ''}
-                        </div>
-                        
-                        <div class="prompt-content-grid">
-                            <div class="prompt-content">
-                                <strong>🌟 メインプロンプト:</strong><br>
-                                ${highlightSearch(prompt.mainPrompt)}
-                            </div>
-                            ${prompt.character1 ? `<div class="prompt-content character-content">
-                                <strong>👤 1人目:</strong><br>
-                                ${highlightSearch(prompt.character1)}
-                            </div>` : ''}
-                            ${prompt.character2 ? `<div class="prompt-content character-content">
-                                <strong>👥 2人目:</strong><br>
-                                ${highlightSearch(prompt.character2)}
-                            </div>` : ''}
-                            ${prompt.character3to6 ? `<div class="prompt-content character-content">
-                                <strong>👥+ 3〜6人目:</strong><br>
-                                ${highlightSearch(prompt.character3to6)}
-                            </div>` : ''}
-                        </div>
                     </div>
                 </div>
             `).join('');
@@ -994,18 +952,30 @@
             return text.substring(0, maxLength) + '...';
         }
 
-        // 詳細表示の切り替え
-        function togglePromptDetails(id) {
-            const details = document.getElementById(`details-${id}`);
-            const button = event.target;
+        // プロンプトを入力欄に復元
+        function restorePromptToInputs(id) {
+            const prompt = prompts.find(p => p.id == id);
+            if (!prompt) return;
             
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-                button.textContent = '📖 閉じる';
-            } else {
-                details.style.display = 'none';
-                button.textContent = '📖 詳細';
+            // 各入力欄に値を設定
+            document.getElementById('promptTitle').value = prompt.title || '';
+            document.getElementById('mainPrompt').value = prompt.mainPrompt || '';
+            document.getElementById('character1').value = prompt.character1 || '';
+            document.getElementById('character2').value = prompt.character2 || '';
+            document.getElementById('character3to6').value = prompt.character3to6 || '';
+            
+            // タグも復元
+            currentTags.clear();
+            if (prompt.tags) {
+                prompt.tags.forEach(tag => currentTags.add(tag));
             }
+            updateTagsDisplay();
+            
+            // 成功メッセージ
+            showNotification(`"${prompt.title || '無題'}" を入力欄に復元しました！`);
+            
+            // 入力エリアまでスクロール
+            document.querySelector('.title-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         // 検索語句のハイライト
