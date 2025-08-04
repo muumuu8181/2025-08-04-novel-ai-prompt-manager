@@ -1,0 +1,27 @@
+# 基本
+*.pyc
+__pycache__/
+*.log
+.DS_Store
+node_modules/
+venv/
+
+# ユーザーデータ
+user_data/
+backups/
+*.backup
+
+# ブラウザキャッシュ
+.cache/
+temp/
+
+# IDEファイル
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS生成ファイル
+desktop.ini
+Thumbs.db
+.directory
