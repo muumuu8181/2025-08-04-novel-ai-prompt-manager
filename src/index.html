@@ -150,13 +150,20 @@
             border-color: #4A90E2;
         }
 
-        .input-with-button {
+        .input-with-label {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: flex-start;
         }
 
-        .input-with-button textarea {
+        .input-with-label h3 {
+            margin: 0;
+            min-width: 120px;
+            padding-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-with-label textarea {
             flex: 1;
         }
 
@@ -177,6 +184,46 @@
         .copy-btn-side:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .save-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn-large {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 200px;
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input-group .search-input {
+            flex: 1;
+        }
+
+        .btn-search {
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-search:hover {
+            background: #0056b3;
         }
 
         .tags-section {
@@ -522,7 +569,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.24</div>
+        <div class="version-badge">v0.25</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
@@ -538,8 +585,8 @@
             <!-- プロンプト入力エリア -->
             <div class="prompt-input-grid">
                 <div class="input-section main-prompt-section">
-                    <h3>🌟 メインプロンプト</h3>
-                    <div class="input-with-button">
+                    <div class="input-with-label">
+                        <h3>🌟 メインプロンプト</h3>
                         <textarea id="mainPrompt" class="main-prompt" placeholder="背景、設定、品質指定など...&#10;&#10;例：&#10;beautiful landscape, detailed background, high quality, masterpiece, 8k resolution, studio lighting"></textarea>
                         <button onclick="copyIndividualPrompt('main')" class="copy-btn-side">📋</button>
                     </div>
@@ -547,24 +594,24 @@
                 
                 <div class="character-grid">
                     <div class="input-section character-section">
-                        <h3>👤 1人目</h3>
-                        <div class="input-with-button">
+                        <div class="input-with-label">
+                            <h3>👤 1人目</h3>
                             <textarea id="character1" class="character-prompt" placeholder="1人目のキャラクター詳細...&#10;&#10;例：&#10;anime girl, long blue hair, green eyes, school uniform"></textarea>
                             <button onclick="copyIndividualPrompt('char1')" class="copy-btn-side">📋</button>
                         </div>
                     </div>
                     
                     <div class="input-section character-section">
-                        <h3>👥 2人目</h3>
-                        <div class="input-with-button">
+                        <div class="input-with-label">
+                            <h3>👥 2人目</h3>
                             <textarea id="character2" class="character-prompt" placeholder="2人目のキャラクター詳細...&#10;&#10;例：&#10;anime boy, short black hair, brown eyes, casual clothes"></textarea>
                             <button onclick="copyIndividualPrompt('char2')" class="copy-btn-side">📋</button>
                         </div>
                     </div>
                     
                     <div class="input-section character-section">
-                        <h3>👥+ 3〜6人目</h3>
-                        <div class="input-with-button">
+                        <div class="input-with-label">
+                            <h3>👥+ 3〜6人目</h3>
                             <textarea id="character3to6" class="character-prompt" placeholder="3〜6人目の追加キャラクター...&#10;&#10;例：&#10;background characters, crowd, various people"></textarea>
                             <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn-side">📋</button>
                         </div>
@@ -572,10 +619,15 @@
                 </div>
             </div>
 
+            <!-- プロンプト保存 -->
+            <div class="save-section">
+                <button onclick="savePrompt()" class="btn-primary btn-large">💾 プロンプト保存</button>
+            </div>
+
             <!-- タグ管理セクション -->
             <div class="tags-section">
-                <h3>🏷️ タグ管理</h3>
-                <div class="tags-input-group">
+                <div class="input-with-label">
+                    <h3>🏷️ タグ管理</h3>
                     <input type="text" id="tagInput" class="tag-input" placeholder="新しいタグを入力... (例: 男性, 女性, 森の中, 夜)">
                     <button onclick="addTag()" class="add-tag-btn">➕ タグ追加</button>
                 </div>
@@ -593,7 +645,10 @@
             <div class="search-filter-section">
                 <div style="flex: 2;">
                     <h4>🔍 キーワード検索</h4>
-                    <input type="text" id="searchInput" class="search-input" placeholder="プロンプト内容で検索...">
+                    <div class="search-input-group">
+                        <input type="text" id="searchInput" class="search-input" placeholder="プロンプト内容で検索...">
+                        <button onclick="performSearch()" class="btn-search">🔍</button>
+                    </div>
                 </div>
                 <div class="tag-filter">
                     <h4>🏷️ タグフィルター</h4>
@@ -610,8 +665,6 @@
 
             <!-- 操作ボタン -->
             <div class="button-group">
-                <button onclick="savePrompt()" class="btn-primary">💾 プロンプト保存</button>
-                <button onclick="saveFromClipboard()" class="btn-secondary">📋 クリップボードから保存</button>
                 <button onclick="exportData()" class="btn-info">📤 エクスポート</button>
                 <button onclick="importData()" class="btn-info">📥 インポート</button>
                 <button onclick="clearAll()" class="btn-secondary">🗑️ 全削除</button>
@@ -679,7 +732,21 @@
                     addTag();
                 }
             });
+            
+            // 検索ボタンのクリックイベント
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
         };
+
+        // 検索実行
+        function performSearch() {
+            currentSearch = document.getElementById('searchInput').value;
+            displayPrompts();
+            showNotification('検索を実行しました');
+        }
 
         // 個別プロンプトのコピー
         async function copyIndividualPrompt(type) {
