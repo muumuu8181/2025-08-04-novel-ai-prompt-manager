@@ -93,8 +93,8 @@
 
         .character-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
         .input-section {
@@ -476,6 +476,20 @@
             border-top: 1px solid #e9ecef;
         }
 
+        .detail-copy-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .detail-copy-buttons h4 {
+            width: 100%;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1rem;
+        }
+
         @media (max-width: 768px) {
             .character-grid {
                 grid-template-columns: 1fr;
@@ -507,7 +521,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.21</div>
+        <div class="version-badge">v0.22</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
@@ -873,15 +887,20 @@
                     </div>
                     
                     <div class="prompt-actions">
-                        <button onclick="togglePromptDetails('${prompt.id}')" class="btn-info btn-small">📖 詳細</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-primary btn-small">📋 メイン</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'char1')" class="btn-secondary btn-small">📋 1人目</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'char2')" class="btn-secondary btn-small">📋 2人目</button>
-                        <button onclick="copyStoredPrompt('${prompt.id}', 'char3to6')" class="btn-secondary btn-small">📋 3〜6人目</button>
+                        <button onclick="togglePromptDetails('${prompt.id}')" class="btn-info btn-small">📖 詳細表示</button>
+                        <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-primary btn-small">📋 メインコピー</button>
                         <button onclick="deletePrompt('${prompt.id}')" class="btn-info btn-small">🗑️ 削除</button>
                     </div>
                     
                     <div id="details-${prompt.id}" class="prompt-details" style="display: none;">
+                        <h4>📋 個別コピー機能：</h4>
+                        <div class="detail-copy-buttons">
+                            <button onclick="copyStoredPrompt('${prompt.id}', 'main')" class="btn-primary btn-small">📋 メインプロンプト</button>
+                            ${prompt.character1 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char1')" class="btn-secondary btn-small">📋 1人目</button>` : ''}
+                            ${prompt.character2 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char2')" class="btn-secondary btn-small">📋 2人目</button>` : ''}
+                            ${prompt.character3to6 ? `<button onclick="copyStoredPrompt('${prompt.id}', 'char3to6')" class="btn-secondary btn-small">📋 3〜6人目</button>` : ''}
+                        </div>
+                        
                         <div class="prompt-content-grid">
                             <div class="prompt-content">
                                 <strong>🌟 メインプロンプト:</strong><br>
