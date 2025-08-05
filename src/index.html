@@ -61,11 +61,59 @@
             border-bottom: 1px solid #e9ecef;
         }
 
-        .prompt-input-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        .unified-prompt-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+        }
+
+        .prompt-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .prompt-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .prompt-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .prompt-field h3 {
+            min-width: 80px;
+            margin: 0;
+            padding-top: 8px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .unified-prompt {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 60px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .unified-prompt.main-prompt {
+            min-height: 120px;
+        }
+
+        .unified-prompt:focus {
+            outline: none;
+            border-color: #4A90E2;
         }
 
         .title-section {
@@ -91,11 +139,6 @@
             border-color: #4A90E2;
         }
 
-        .character-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
 
         .input-section {
             background: white;
@@ -113,30 +156,6 @@
             gap: 8px;
         }
 
-        .main-prompt-section {
-            grid-column: 1;
-        }
-
-        .main-prompt-section h3 {
-            font-size: 1.2rem;
-            color: #4A90E2;
-        }
-
-        .character-section {
-            position: relative;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            resize: vertical;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-
         textarea::placeholder {
             color: #f0f0f0;
             opacity: 0.3;
@@ -145,19 +164,6 @@
         input::placeholder {
             color: #f0f0f0;
             opacity: 0.3;
-        }
-
-        .main-prompt {
-            min-height: 120px;
-        }
-
-        .character-prompt {
-            min-height: 80px;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #4A90E2;
         }
 
         .input-with-label {
@@ -443,6 +449,150 @@
             background: #0056b3;
         }
 
+        .btn-search-clear {
+            padding: 8px 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            min-width: 40px;
+        }
+
+        .btn-search-clear:hover {
+            background: #c82333;
+        }
+
+        .search-within-save {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .search-within-save h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .search-inline {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-input-group-compact {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-input-compact {
+            width: 200px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .stats-compact {
+            text-align: center;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stats-compact span {
+            font-weight: bold;
+            color: #4A90E2;
+        }
+
+        .search-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        .search-keyword-tag {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            animation: fadeInScale 0.3s ease;
+        }
+
+        .search-keyword-tag .remove-keyword {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 0 2px;
+            margin-left: 2px;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .search-keyword-tag .remove-keyword:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .exclude-keyword-tag {
+            background: #dc3545;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            animation: fadeInScale 0.3s ease;
+        }
+
+        .exclude-keyword-tag .remove-keyword {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 0 2px;
+            margin-left: 2px;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .exclude-keyword-tag .remove-keyword:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         .tags-section {
             background: white;
             padding: 15px;
@@ -532,18 +682,12 @@
             font-weight: bold;
         }
 
-        .search-filter-section {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
         .search-section {
             background: white;
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         .search-section h4 {
@@ -560,24 +704,12 @@
             font-size: 14px;
         }
 
-        .tag-filter-below {
-            margin-top: 10px;
-        }
-
-        .tag-filter-select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            background: #f8f9fa;
-        }
-
         .potion-input-section {
             background: white;
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         .potion-input-section h4 {
@@ -625,6 +757,10 @@
         }
 
         .main-content {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             padding: 20px;
         }
 
@@ -813,10 +949,22 @@
             border-top: 1px solid #e9ecef;
         }
 
+        .search-highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
 
         @media (max-width: 768px) {
-            .character-grid {
-                grid-template-columns: 1fr;
+            .prompt-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .prompt-field h3 {
+                min-width: auto;
+                padding-top: 0;
             }
         }
 
@@ -899,10 +1047,9 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.4</div>
+        <div class="version-badge">v0.6</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
-            <p>複数キャラクター対応・タグ付き高度プロンプト管理システム</p>
         </div>
 
         <div class="controls">
@@ -915,43 +1062,38 @@
             </div>
 
             <!-- プロンプト入力エリア -->
-            <div class="prompt-input-grid">
-                <div class="input-section main-prompt-section">
-                    <div class="input-with-label">
-                        <h3>🌟 メインプロンプト</h3>
-                        <textarea id="mainPrompt" class="main-prompt" placeholder="背景、設定、品質指定など...&#10;&#10;例：&#10;beautiful landscape, detailed background, high quality, masterpiece, 8k resolution, studio lighting"></textarea>
+            <div class="input-section unified-prompt-section">
+                <div class="prompt-row">
+                    <div class="prompt-field">
+                        <h3>🌟 メイン</h3>
+                        <textarea id="mainPrompt" class="unified-prompt main-prompt" placeholder="背景、設定、品質指定など..."></textarea>
                         <button onclick="copyIndividualPrompt('main')" class="copy-btn-side">📋</button>
                     </div>
                 </div>
-                
-                <div class="character-grid">
-                    <div class="input-section character-section">
-                        <div class="input-with-label">
-                            <h3>👤 1人目</h3>
-                            <textarea id="character1" class="character-prompt" placeholder="1人目のキャラクター詳細...&#10;&#10;例：&#10;anime girl, long blue hair, green eyes, school uniform"></textarea>
-                            <button onclick="copyIndividualPrompt('char1')" class="copy-btn-side">📋</button>
-                        </div>
+                <div class="prompt-row">
+                    <div class="prompt-field">
+                        <h3>👤 1人目</h3>
+                        <textarea id="character1" class="unified-prompt" placeholder="1人目のキャラクター詳細..."></textarea>
+                        <button onclick="copyIndividualPrompt('char1')" class="copy-btn-side">📋</button>
                     </div>
-                    
-                    <div class="input-section character-section">
-                        <div class="input-with-label">
-                            <h3>👥 2人目</h3>
-                            <textarea id="character2" class="character-prompt" placeholder="2人目のキャラクター詳細...&#10;&#10;例：&#10;anime boy, short black hair, brown eyes, casual clothes"></textarea>
-                            <button onclick="copyIndividualPrompt('char2')" class="copy-btn-side">📋</button>
-                        </div>
+                </div>
+                <div class="prompt-row">
+                    <div class="prompt-field">
+                        <h3>👥 2人目</h3>
+                        <textarea id="character2" class="unified-prompt" placeholder="2人目のキャラクター詳細..."></textarea>
+                        <button onclick="copyIndividualPrompt('char2')" class="copy-btn-side">📋</button>
                     </div>
-                    
-                    <div class="input-section character-section">
-                        <div class="input-with-label">
-                            <h3>👥+ 3〜6人目</h3>
-                            <textarea id="character3to6" class="character-prompt" placeholder="3〜6人目の追加キャラクター...&#10;&#10;例：&#10;background characters, crowd, various people"></textarea>
-                            <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn-side">📋</button>
-                        </div>
+                </div>
+                <div class="prompt-row">
+                    <div class="prompt-field">
+                        <h3>👥+ 3〜6人目</h3>
+                        <textarea id="character3to6" class="unified-prompt" placeholder="3〜6人目の追加キャラクター..."></textarea>
+                        <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn-side">📋</button>
                     </div>
                 </div>
             </div>
 
-            <!-- プロンプト保存 -->
+            <!-- プロンプト保存・検索セクション -->
             <div class="save-section">
                 <div class="save-and-clear-section">
                     <div class="save-buttons">
@@ -960,6 +1102,35 @@
                     </div>
                     <button onclick="clearAllInputs()" class="btn-clear">🧹 クリア</button>
                 </div>
+                
+                <!-- キーワード検索 -->
+                <div class="search-within-save">
+                    <div class="search-inline">
+                        <h4>検索</h4>
+                        <div class="search-input-group-compact">
+                            <input type="text" id="searchInput" class="search-input-compact" placeholder="プロンプト内容で検索...">
+                            <button onclick="addSearchKeyword()" class="btn-search">➕</button>
+                            <button onclick="clearAllSearchKeywords()" class="btn-search-clear">❌</button>
+                        </div>
+                    </div>
+                    <div class="search-keywords" id="searchKeywords">
+                        <!-- 検索キーワードタグが表示される -->
+                    </div>
+                    
+                    <div class="search-inline" style="margin-top: 10px;">
+                        <h4>除外</h4>
+                        <div class="search-input-group-compact">
+                            <input type="text" id="excludeInput" class="search-input-compact" placeholder="除外するキーワード...">
+                            <button onclick="addExcludeKeyword()" class="btn-search">➖</button>
+                            <button onclick="clearAllExcludeKeywords()" class="btn-search-clear">❌</button>
+                        </div>
+                    </div>
+                    
+                    <div class="search-keywords" id="excludeKeywords">
+                        <!-- 除外キーワードタグが表示される -->
+                    </div>
+                </div>
+                
                 <div id="potionPreview" class="potion-preview" style="display: none;">
                     <div class="potion-preview-content">
                         <img id="potionPreviewImage" src="" alt="ポーション画像" class="potion-preview-img">
@@ -967,6 +1138,22 @@
                             <span id="potionPreviewName">ポーション名</span>
                             <button onclick="removePotionData()" class="btn-remove-potion">🗑️ 削除</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- プロンプト一覧セクション -->
+            <div class="main-content">
+                <!-- 統計表示 -->
+                <div class="stats-compact">
+                    総プロンプト <span id="totalCount">0</span> | 検索結果 <span id="searchCount">0</span> | 今日追加 <span id="todayCount">0</span> | タグ数 <span id="tagCount">0</span>
+                </div>
+
+                <!-- プロンプト一覧 -->
+                <div id="promptList" class="prompt-list">
+                    <div class="empty-state">
+                        <h3>📝 プロンプトがありません</h3>
+                        <p>最初のプロンプトを追加してください</p>
                     </div>
                 </div>
             </div>
@@ -988,24 +1175,10 @@
                 </div>
             </div>
 
-            <!-- 検索・フィルター -->
-            <div class="search-filter-section">
-                <div class="search-section">
-                    <h4>🔍 キーワード検索</h4>
-                    <div class="search-input-group">
-                        <input type="text" id="searchInput" class="search-input" placeholder="プロンプト内容で検索...">
-                        <button onclick="performSearch()" class="btn-search">🔍</button>
-                    </div>
-                    <div class="tag-filter-below">
-                        <select id="tagFilter" class="tag-filter-select">
-                            <option value="">🏷️ 全てのタグ</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="potion-input-section">
-                    <h4>🧪 ポーション</h4>
-                    <input type="file" id="potionInput" class="file-input" accept=".txt,.json,.png,.jpg,.jpeg" multiple onchange="loadPotions()">
-                </div>
+            <!-- ポーション読み込みセクション -->
+            <div class="potion-input-section">
+                <h4>🧪 ポーション</h4>
+                <input type="file" id="potionInput" class="file-input" accept=".txt,.json,.png,.jpg,.jpeg" multiple onchange="loadPotions()">
             </div>
 
             <!-- 操作ボタン -->
@@ -1028,36 +1201,6 @@
                 <div id="debugLogs" class="debug-logs"></div>
             </div>
         </div>
-
-        <div class="main-content">
-            <!-- 統計表示 -->
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-number" id="totalCount">0</div>
-                    <div class="stat-label">総プロンプト数</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="searchCount">0</div>
-                    <div class="stat-label">検索結果</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="todayCount">0</div>
-                    <div class="stat-label">今日追加</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="tagCount">0</div>
-                    <div class="stat-label">タグ数</div>
-                </div>
-            </div>
-
-            <!-- プロンプト一覧 -->
-            <div id="promptList" class="prompt-list">
-                <div class="empty-state">
-                    <h3>📝 プロンプトがありません</h3>
-                    <p>最初のプロンプトを追加してください</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -1065,7 +1208,8 @@
         let allTags = new Set();
         let currentTags = new Set();
         let currentSearch = '';
-        let currentTagFilter = '';
+        let searchKeywords = new Set(); // 複数検索キーワード
+        let excludeKeywords = new Set(); // 除外キーワード
         let currentEditingId = null; // 現在編集中のプロンプトID
         let debugLogs = []; // デバッグログ保存用
 
@@ -1077,16 +1221,6 @@
             updateTagsDisplay();
             
             // イベントリスナー設定
-            document.getElementById('searchInput').addEventListener('input', function() {
-                currentSearch = this.value;
-                displayPrompts();
-            });
-            
-            document.getElementById('tagFilter').addEventListener('change', function() {
-                currentTagFilter = this.value;
-                displayPrompts();
-            });
-            
             document.getElementById('tagInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     addTag();
@@ -1096,16 +1230,100 @@
             // 検索ボタンのクリックイベント
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    performSearch();
+                    addSearchKeyword();
+                }
+            });
+            
+            // 除外入力のEnterキー対応
+            document.getElementById('excludeInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addExcludeKeyword();
                 }
             });
         };
 
-        // 検索実行
-        function performSearch() {
-            currentSearch = document.getElementById('searchInput').value;
+        // 検索キーワード追加
+        function addSearchKeyword() {
+            const input = document.getElementById('searchInput');
+            const keyword = input.value.trim();
+            
+            if (!keyword) return;
+            
+            searchKeywords.add(keyword);
+            input.value = '';
+            updateSearchKeywordsDisplay();
             displayPrompts();
-            showNotification('検索を実行しました');
+            showNotification(`検索キーワード「${keyword}」を追加しました`);
+        }
+
+        // 検索キーワード削除
+        function removeSearchKeyword(keyword) {
+            searchKeywords.delete(keyword);
+            updateSearchKeywordsDisplay();
+            displayPrompts();
+            showNotification(`検索キーワード「${keyword}」を削除しました`);
+        }
+
+        // 全検索キーワードクリア
+        function clearAllSearchKeywords() {
+            searchKeywords.clear();
+            document.getElementById('searchInput').value = '';
+            updateSearchKeywordsDisplay();
+            displayPrompts();
+            showNotification('検索キーワードを全てクリアしました');
+        }
+
+        // 検索キーワード表示更新
+        function updateSearchKeywordsDisplay() {
+            const container = document.getElementById('searchKeywords');
+            container.innerHTML = Array.from(searchKeywords).map(keyword => 
+                `<span class="search-keyword-tag">
+                    ${keyword}
+                    <span class="remove-keyword" onclick="removeSearchKeyword('${keyword}')">×</span>
+                </span>`
+            ).join('');
+        }
+
+        // 除外キーワード追加
+        function addExcludeKeyword() {
+            const input = document.getElementById('excludeInput');
+            const keyword = input.value.trim();
+            
+            if (!keyword) return;
+            
+            excludeKeywords.add(keyword);
+            input.value = '';
+            updateExcludeKeywordsDisplay();
+            displayPrompts();
+            showNotification(`除外キーワード「${keyword}」を追加しました`);
+        }
+
+        // 除外キーワード削除
+        function removeExcludeKeyword(keyword) {
+            excludeKeywords.delete(keyword);
+            updateExcludeKeywordsDisplay();
+            displayPrompts();
+            showNotification(`除外キーワード「${keyword}」を削除しました`);
+        }
+
+        // 全除外キーワードクリア
+        function clearAllExcludeKeywords() {
+            excludeKeywords.clear();
+            document.getElementById('excludeInput').value = '';
+            updateExcludeKeywordsDisplay();
+            displayPrompts();
+            showNotification('除外キーワードを全てクリアしました');
+        }
+
+        // 除外キーワード表示更新
+        function updateExcludeKeywordsDisplay() {
+            const container = document.getElementById('excludeKeywords');
+            container.innerHTML = Array.from(excludeKeywords).map(keyword => 
+                `<span class="exclude-keyword-tag">
+                    ${keyword}
+                    <span class="remove-keyword" onclick="removeExcludeKeyword('${keyword}')">×</span>
+                </span>`
+            ).join('');
         }
 
         // 個別プロンプトのコピー
@@ -1178,13 +1396,6 @@
                 `<span class="current-tag">${tag} <span class="remove-tag" onclick="removeCurrentTag('${tag}')">×</span></span>`
             ).join('');
             
-            // タグフィルターの更新
-            const tagFilter = document.getElementById('tagFilter');
-            const currentValue = tagFilter.value;
-            tagFilter.innerHTML = '<option value="">全てのタグ</option>' + 
-                Array.from(allTags).map(tag => 
-                    `<option value="${tag}" ${currentValue === tag ? 'selected' : ''}>${tag}</option>`
-                ).join('');
         }
 
         // タグの切り替え
@@ -1331,8 +1542,8 @@
             if (filteredPrompts.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <h3>🔍 ${currentSearch || currentTagFilter ? '検索結果なし' : 'プロンプトがありません'}</h3>
-                        <p>${currentSearch || currentTagFilter ? '条件に一致するプロンプトが見つかりません' : '最初のプロンプトを追加してください'}</p>
+                        <h3>🔍 ${currentSearch ? '検索結果なし' : 'プロンプトがありません'}</h3>
+                        <p>${currentSearch ? '条件に一致するプロンプトが見つかりません' : '最初のプロンプトを追加してください'}</p>
                     </div>
                 `;
                 updateStats();
@@ -1351,7 +1562,7 @@
                                 ${prompt.potionName ? `<span class="mini-tag potion-name">🧪 ${prompt.potionName}</span>` : ''}
                             </div>
                             <div class="prompt-title-line">
-                                <strong>${highlightSearch(prompt.title || '無題')}</strong> - ${highlightSearch(truncateText(prompt.mainPrompt, 50))}
+                                <strong>${highlightSearchKeywords(prompt.title || '無題')}</strong> - ${highlightSearchKeywords(truncateText(prompt.mainPrompt, 50))}
                             </div>
                         </div>
                         <div class="prompt-actions">
@@ -1403,24 +1614,49 @@
         function filterPrompts() {
             let filtered = prompts;
 
-            // キーワード検索
-            if (currentSearch.trim()) {
-                const searchTerm = currentSearch.toLowerCase();
-                filtered = filtered.filter(prompt => 
-                    (prompt.title && prompt.title.toLowerCase().includes(searchTerm)) ||
-                    prompt.mainPrompt.toLowerCase().includes(searchTerm) ||
-                    prompt.character1.toLowerCase().includes(searchTerm) ||
-                    prompt.character2.toLowerCase().includes(searchTerm) ||
-                    prompt.character3to6.toLowerCase().includes(searchTerm) ||
-                    prompt.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-                );
+            // 複数キーワード検索（AND検索）
+            if (searchKeywords.size > 0) {
+                const keywords = Array.from(searchKeywords).map(k => k.toLowerCase());
+                debugLog(`複数キーワード検索実行: [${keywords.join(', ')}] - 対象件数: ${prompts.length}`, 'info');
+                
+                filtered = filtered.filter(prompt => {
+                    // 全てのキーワードがマッチするかチェック（AND検索）
+                    return keywords.every(searchTerm => {
+                        const titleMatch = prompt.title && prompt.title.toLowerCase().includes(searchTerm);
+                        const mainMatch = prompt.mainPrompt && prompt.mainPrompt.toLowerCase().includes(searchTerm);
+                        const char1Match = prompt.character1 && prompt.character1.toLowerCase().includes(searchTerm);
+                        const char2Match = prompt.character2 && prompt.character2.toLowerCase().includes(searchTerm);
+                        const char3Match = prompt.character3to6 && prompt.character3to6.toLowerCase().includes(searchTerm);
+                        const tagMatch = prompt.tags && prompt.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                        
+                        return titleMatch || mainMatch || char1Match || char2Match || char3Match || tagMatch;
+                    });
+                });
+                
+                debugLog(`複数キーワードフィルター結果: ${filtered.length}件`, 'success');
             }
 
-            // タグフィルター
-            if (currentTagFilter) {
-                filtered = filtered.filter(prompt => 
-                    prompt.tags.includes(currentTagFilter)
-                );
+            // 除外キーワード（いずれかが含まれるものを除外）
+            if (excludeKeywords.size > 0) {
+                const excludeTerms = Array.from(excludeKeywords).map(k => k.toLowerCase());
+                debugLog(`除外キーワード実行: [${excludeTerms.join(', ')}] - 対象件数: ${filtered.length}`, 'info');
+                
+                const beforeCount = filtered.length;
+                filtered = filtered.filter(prompt => {
+                    // いずれかの除外キーワードが含まれる場合は除外
+                    return !excludeTerms.some(excludeTerm => {
+                        const titleMatch = prompt.title && prompt.title.toLowerCase().includes(excludeTerm);
+                        const mainMatch = prompt.mainPrompt && prompt.mainPrompt.toLowerCase().includes(excludeTerm);
+                        const char1Match = prompt.character1 && prompt.character1.toLowerCase().includes(excludeTerm);
+                        const char2Match = prompt.character2 && prompt.character2.toLowerCase().includes(excludeTerm);
+                        const char3Match = prompt.character3to6 && prompt.character3to6.toLowerCase().includes(excludeTerm);
+                        const tagMatch = prompt.tags && prompt.tags.some(tag => tag.toLowerCase().includes(excludeTerm));
+                        
+                        return titleMatch || mainMatch || char1Match || char2Match || char3Match || tagMatch;
+                    });
+                });
+                
+                debugLog(`除外フィルター結果: ${filtered.length}件 (${beforeCount - filtered.length}件除外)`, 'success');
             }
 
             return filtered;
@@ -1435,8 +1671,16 @@
 
         // プロンプトを入力欄に復元
         function restorePromptToInputs(id) {
+            debugLog(`=== プロンプト復元開始 ===`, 'info');
+            debugLog(`対象ID: ${id}`, 'info');
+            
             const prompt = prompts.find(p => p.id == id);
-            if (!prompt) return;
+            if (!prompt) {
+                debugLog(`プロンプトが見つかりません: ID=${id}`, 'error');
+                return;
+            }
+            
+            debugLog(`見つかったプロンプト: "${prompt.title}"`, 'success');
             
             // 各入力欄に値を設定
             document.getElementById('promptTitle').value = prompt.title || '';
@@ -1444,6 +1688,8 @@
             document.getElementById('character1').value = prompt.character1 || '';
             document.getElementById('character2').value = prompt.character2 || '';
             document.getElementById('character3to6').value = prompt.character3to6 || '';
+            
+            debugLog(`入力欄に値を設定完了`, 'success');
             
             // タグも復元
             currentTags.clear();
@@ -1477,14 +1723,21 @@
             document.querySelector('.title-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 検索語句のハイライト
-        function highlightSearch(content) {
-            if (!currentSearch.trim() || !content) {
+        // 検索キーワードのハイライト（複数対応）
+        function highlightSearchKeywords(content) {
+            if (searchKeywords.size === 0 || !content) {
                 return content || '';
             }
 
-            const regex = new RegExp(`(${currentSearch})`, 'gi');
-            return content.replace(regex, '<span class="search-highlight">$1</span>');
+            let highlightedContent = content;
+            
+            // 各検索キーワードをハイライト
+            Array.from(searchKeywords).forEach(keyword => {
+                const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                highlightedContent = highlightedContent.replace(regex, '<span class="search-highlight">$1</span>');
+            });
+            
+            return highlightedContent;
         }
 
         // プロンプトの削除
