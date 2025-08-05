@@ -97,16 +97,33 @@ studio lighting, soft colors
 ## 📂 フォルダ構成
 ```
 2025-08-04-novel-ai-prompt-manager/
-├── src/
-│   └── index.html      # メインアプリケーション
+├── core/               # 🛡️ 確定版・安定版
+│   └── index.html      # 動作確認済みの最新安定版
+├── dev/                # 🧪 開発版
+│   └── index.html      # 開発中・実験的機能
+├── src/                # 🔧 現在の作業版
+│   └── index.html      # 現在編集中のバージョン
 ├── tests/              # テストファイル（将来用）
 ├── prompts/            # 外部テキストファイル用フォルダ
 │   └── (*.txt files)   # プロンプトテキストファイル
 ├── README.md           # このファイル
+├── REFLECTION.md       # 開発時の振り返りドキュメント
 ├── VERSION.md          # バージョン履歴
 ├── LICENSE             # MITライセンス
 └── .gitignore          # Git無視ファイル
 ```
+
+## 🔄 開発フロー
+
+### 段階的品質管理システム
+1. **src/** - 開発・実験段階（v0.x.xx形式）
+2. **dev/** - テスト・検証段階（v0.x-dev.x形式）  
+3. **core/** - 確定・安定版（vX.X形式）
+
+### 🛡️ 安定性保証
+- **core版はダウングレードしない**
+- 問題発生時は常にcore版に戻れる
+- 段階的な品質管理でリスク軽減
 
 ## 🆘 トラブルシューティング
 
