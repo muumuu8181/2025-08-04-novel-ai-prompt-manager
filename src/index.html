@@ -1047,7 +1047,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.602</div>
+        <div class="version-badge">v0.620-final</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
         </div>
@@ -1097,10 +1097,11 @@
             <div class="save-section">
                 <div class="save-and-clear-section">
                     <div class="save-buttons">
-                        <button onclick="savePrompt('new')" class="btn-primary btn-save">💾 新規保存</button>
+                        <button onclick="debugLog('🔥 STEP1: 保存ボタンがクリックされました!', 'info'); savePrompt('new')" class="btn-primary btn-save">💾 新規保存</button>
                         <button onclick="savePrompt('overwrite')" class="btn-secondary btn-save" id="overwriteBtn" style="display: none;">📝 上書き保存</button>
                     </div>
                     <button onclick="clearAllInputs()" class="btn-clear">🧹 クリア</button>
+                    <button onclick="resetLocalStorage()" class="btn-clear" style="background: red; color: white;">🚨 完全リセット</button>
                 </div>
                 
                 <!-- キーワード検索 -->
@@ -1187,6 +1188,7 @@
                 <button onclick="importData()" class="btn-info">📥 インポート</button>
                 <button onclick="clearAll()" class="btn-secondary">🗑️ 全削除</button>
                 <button onclick="toggleDebugPanel()" class="btn-info">🔍 デバッグ</button>
+                <button onclick="debugLog('テストボタンクリック: currentEditingId=' + currentEditingId + ', prompts.length=' + prompts.length, 'info')" class="btn-info">🧪 テスト</button>
             </div>
 
             <!-- デバッグパネル -->
@@ -1422,8 +1424,9 @@
             const title = document.getElementById('promptTitle').value.trim();
             const mainPrompt = document.getElementById('mainPrompt').value.trim();
             
-            debugLog(`タイトル: "${title}"`, 'info');
-            debugLog(`メインプロンプト: "${mainPrompt.substring(0, 50)}..."`, 'info');
+            debugLog(`🔥 STEP3: タイトル取得: "${title}" (長さ: ${title.length})`, 'info');
+            debugLog(`🔥 STEP3: メインプロンプト取得: "${mainPrompt}" (長さ: ${mainPrompt.length})`, 'info');
+            debugLog(`🔥 STEP3: mainPromptフィールド存在確認: ${document.getElementById('mainPrompt') ? 'あり' : 'なし'}`, 'info');
             
             if (!title) {
                 debugLog('タイトルが空のため保存中止', 'error');
@@ -1447,6 +1450,11 @@
                 timestamp: new Date(),
                 source: window.currentPotionData ? 'potion' : 'manual'
             };
+            
+            debugLog(`🔥 promptData作成後:`, 'info');
+            debugLog(`  - title: "${promptData.title}"`, 'info');
+            debugLog(`  - mainPrompt: "${promptData.mainPrompt}"`, 'info');
+            debugLog(`  - character1: "${promptData.character1}"`, 'info');
 
             // ポーション情報がある場合は追加
             if (window.currentPotionData) {
@@ -1460,36 +1468,60 @@
                 }
             }
 
+            debugLog(`保存処理開始: mode=${mode}, currentEditingId=${currentEditingId}`, 'info');
+            
             if (mode === 'overwrite' && currentEditingId) {
                 // 上書き保存
+                debugLog('上書き保存処理開始', 'info');
                 const index = prompts.findIndex(p => p.id == currentEditingId);
+                debugLog(`対象プロンプトのインデックス: ${index}`, 'info');
+                
                 if (index !== -1) {
+                    const oldPrompt = prompts[index];
+                    debugLog(`上書き対象: "${oldPrompt.title}"`, 'info');
+                    
                     promptData.id = currentEditingId;
                     promptData.originalTimestamp = prompts[index].timestamp; // 元の作成日時を保持
                     prompts[index] = promptData;
+                    
+                    debugLog('上書き保存完了', 'success');
                     showNotification('プロンプトを上書き保存しました！');
                 } else {
                     // 元のプロンプトが見つからない場合は新規保存
+                    debugLog(`❌ 上書き対象が見つからない（ID: ${currentEditingId}）、新規保存に変更`, 'warn');
                     promptData.id = Date.now();
                     prompts.unshift(promptData);
                     showNotification('プロンプトを新規保存しました！');
                 }
             } else {
                 // 新規保存
+                debugLog('新規保存処理実行', 'info');
                 promptData.id = Date.now();
                 prompts.unshift(promptData);
+                
+                debugLog(`🔥 配列追加後の最新プロンプト:`, 'info');
+                debugLog(`  - id: ${prompts[0].id}`, 'info');
+                debugLog(`  - title: "${prompts[0].title}"`, 'info');
+                debugLog(`  - mainPrompt: "${prompts[0].mainPrompt}"`, 'info');
+                
                 showNotification('プロンプトを新規保存しました！');
             }
             
             // タグをグローバルセットに追加
             currentTags.forEach(tag => allTags.add(tag));
+            debugLog(`タグをグローバルセットに追加: [${Array.from(currentTags).join(', ')}]`, 'info');
             
+            debugLog('savePrompts()呼び出し前のプロンプト数: ' + prompts.length, 'info');
             savePrompts();
+            debugLog('savePrompts()呼び出し後のプロンプト数: ' + prompts.length, 'info');
+            
             clearInputs();
             displayPrompts();
             updateStats();
             updateTagsDisplay();
             updateSaveButtons();
+            
+            debugLog('=== プロンプト保存完了 ===', 'success');
         }
 
         // 入力フィールドのクリア
@@ -1544,8 +1576,14 @@
 
         // プロンプトの表示
         function displayPrompts() {
+            debugLog(`=== displayPrompts開始 ===`, 'info');
+            debugLog(`prompts配列の件数: ${prompts.length}`, 'info');
+            debugLog(`prompts配列の内容: ${JSON.stringify(prompts.map(p => ({id: p.id, title: p.title}))).substring(0, 200)}`, 'info');
+            
             const container = document.getElementById('promptList');
             const filteredPrompts = filterPrompts();
+            
+            debugLog(`フィルター後の件数: ${filteredPrompts.length}`, 'info');
 
             if (filteredPrompts.length === 0) {
                 container.innerHTML = `
@@ -1558,30 +1596,86 @@
                 return;
             }
 
-            container.innerHTML = filteredPrompts.map(prompt => `
-                <div class="prompt-item">
-                    <div class="prompt-content-row">
-                        ${prompt.image ? `<div class="prompt-image-main"><img src="${prompt.image}" alt="${prompt.imageName || 'ポーション画像'}" class="prompt-main-image"></div>` : ''}
-                        <div class="prompt-info" onclick="restorePromptToInputs('${prompt.id}')" style="cursor: pointer;">
-                            <div class="prompt-meta">
-                                📅 ${formatDateTime(prompt.timestamp)} 
-                                ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : prompt.source === 'potion' ? '🧪' : '✏️'}
-                                ${prompt.tags.map(tag => `<span class="mini-tag">${tag}</span>`).join('')}
-                                ${prompt.potionName ? `<span class="mini-tag potion-name">🧪 ${prompt.potionName}</span>` : ''}
+            debugLog(`HTMLレンダリング開始: ${filteredPrompts.length}件`, 'info');
+            
+            // 画像データのサイズチェック
+            let totalImageSize = 0;
+            filteredPrompts.forEach((prompt, index) => {
+                if (prompt.image) {
+                    const imageSize = prompt.image.length;
+                    totalImageSize += imageSize;
+                    debugLog(`プロンプト${index + 1}の画像サイズ: ${Math.round(imageSize / 1024)}KB`, 'info');
+                }
+            });
+            debugLog(`総画像データサイズ: ${Math.round(totalImageSize / 1024)}KB`, 'info');
+            
+            try {
+                const htmlContent = filteredPrompts.map(prompt => `
+                    <div class="prompt-item">
+                        <div class="prompt-content-row">
+                            <div class="prompt-info" onclick="restorePromptToInputs(&quot;${prompt.id}&quot;)" style="cursor: pointer;">
+                                <div class="prompt-meta">
+                                    📅 ${formatDateTime(prompt.timestamp)} 
+                                    ${prompt.source === 'clipboard' ? '📋' : prompt.source === 'file' ? '📁' : prompt.source === 'potion' ? '🧪' : '✏️'}
+                                    ${prompt.tags.map(tag => `<span class="mini-tag">${tag}</span>`).join('')}
+                                    ${prompt.potionName ? `<span class="mini-tag potion-name">🧪 ${prompt.potionName}</span>` : ''}
+                                </div>
+                                <div class="prompt-title-line">
+                                    <strong>${highlightSearchKeywords(prompt.title || '無題')}</strong> - ${highlightSearchKeywords(truncateText(prompt.mainPrompt, 50))}
+                                </div>
                             </div>
-                            <div class="prompt-title-line">
-                                <strong>${highlightSearchKeywords(prompt.title || '無題')}</strong> - ${highlightSearchKeywords(truncateText(prompt.mainPrompt, 50))}
+                            <div class="prompt-actions">
+                                ${prompt.image ? `<button onclick="showImagePopup(&quot;${prompt.id}&quot;)" class="btn-image" title="画像を表示">🖼️</button>` : ''}
+                                <button onclick="deletePrompt(&quot;${prompt.id}&quot;)" class="btn-delete">🗑️</button>
                             </div>
-                        </div>
-                        <div class="prompt-actions">
-                            ${prompt.image ? `<div class="prompt-thumbnail"><img src="${prompt.image}" alt="${prompt.imageName || 'ポーション画像'}" class="thumbnail-image" title="${prompt.potionName || prompt.imageName || 'ポーション画像'}"></div>` : ''}
-                            <button onclick="deletePrompt('${prompt.id}')" class="btn-delete">🗑️</button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+                
+                debugLog(`HTML文字列長: ${htmlContent.length}文字`, 'info');
+                container.innerHTML = htmlContent;
+                debugLog(`DOM更新完了`, 'success');
+                
+            } catch (error) {
+                debugLog(`HTMLレンダリングエラー: ${error.message}`, 'error');
+                debugLog(`エラー詳細: ${error.stack}`, 'error');
+            }
 
             updateStats();
+        }
+
+        // 画像ポップアップ表示
+        function showImagePopup(promptId) {
+            const prompt = prompts.find(p => p.id == promptId);
+            if (!prompt || !prompt.image) return;
+            
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                cursor: pointer;
+            `;
+            
+            const img = document.createElement('img');
+            img.src = prompt.image;
+            img.style.cssText = `
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+            
+            popup.appendChild(img);
+            popup.onclick = () => popup.remove();
+            document.body.appendChild(popup);
         }
 
         // 保存済みプロンプトのコピー
@@ -1909,6 +2003,11 @@
                 // 画像のみの場合は入力欄にプレビュー表示
                 if (potion.image && !potion.content) {
                     debugLog('画像のみのポーション検出: ' + baseName, 'info');
+                    
+                    // 既存の入力内容をチェック
+                    const existingTitle = document.getElementById('promptTitle').value.trim();
+                    const existingPrompt = document.getElementById('mainPrompt').value.trim();
+                    
                     window.currentPotionData = {
                         image: potion.image,
                         imageName: potion.imageName,
@@ -1916,6 +2015,15 @@
                     };
                     debugLog('currentPotionData設定完了', 'success');
                     debugLog('画像データ先頭確認: ' + potion.image.substring(0, 30) + '...', 'info');
+                    
+                    // 既存の入力がない場合のみタイトルを設定
+                    if (!existingTitle) {
+                        document.getElementById('promptTitle').value = baseName;
+                        debugLog('タイトルを自動設定: ' + baseName, 'info');
+                    } else {
+                        debugLog('既存タイトルを保持: ' + existingTitle, 'info');
+                    }
+                    
                     updatePotionPreview();
                     debugLog('updatePotionPreview呼び出し完了', 'success');
                 }
@@ -1927,14 +2035,24 @@
                 // ポーションタグをグローバルタグに追加
                 allTags.add('ポーション');
                 
-                // 最初のポーションを入力欄に自動設定してプレビュー表示
+                // 最初のポーションを入力欄に自動設定してプレビュー表示（既存の入力がない場合のみ）
                 if (processedCount === 1) {
                     debugLog('単一ポーションを入力欄に自動設定', 'info');
                     const firstPotionName = Object.keys(potionData)[0];
                     const firstPotion = potionData[firstPotionName];
                     
-                    document.getElementById('promptTitle').value = firstPotionName;
-                    document.getElementById('mainPrompt').value = firstPotion.content;
+                    // 既存の入力内容をチェック
+                    const existingTitle = document.getElementById('promptTitle').value.trim();
+                    const existingPrompt = document.getElementById('mainPrompt').value.trim();
+                    
+                    // 既存の入力がない場合のみ自動設定
+                    if (!existingTitle && !existingPrompt) {
+                        document.getElementById('promptTitle').value = firstPotionName;
+                        document.getElementById('mainPrompt').value = firstPotion.content;
+                        debugLog('入力欄が空のため自動設定を実行', 'info');
+                    } else {
+                        debugLog('既存の入力があるため自動設定をスキップ', 'info');
+                    }
                     
                     if (firstPotion.image) {
                         window.currentPotionData = {
@@ -2021,10 +2139,15 @@
         function updateSaveButtons() {
             const overwriteBtn = document.getElementById('overwriteBtn');
             
+            debugLog(`=== updateSaveButtons実行 ===`, 'info');
+            debugLog(`currentEditingId: ${currentEditingId}`, 'info');
+            
             if (currentEditingId) {
                 overwriteBtn.style.display = 'block';
+                debugLog('上書きボタンを表示', 'success');
             } else {
                 overwriteBtn.style.display = 'none';
+                debugLog('上書きボタンを非表示', 'info');
             }
         }
 
@@ -2033,6 +2156,20 @@
             window.currentPotionData = null;
             updatePotionPreview();
             showNotification('ポーション情報を削除しました');
+        }
+
+        // localStorage完全リセット
+        function resetLocalStorage() {
+            if (confirm('🚨 WARNING: 全てのデータが削除されます。本当に実行しますか？')) {
+                localStorage.removeItem('novel_ai_prompts');
+                prompts = [];
+                allTags = new Set();
+                debugLog('🔥 localStorage完全クリア実行', 'info');
+                displayPrompts();
+                updateStats();
+                updateTagsDisplay();
+                showNotification('localStorage完全クリア完了');
+            }
         }
 
         // 全入力内容のクリア
@@ -2065,6 +2202,8 @@
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
                 debugLog('デバッグパネルを開きました', 'info');
+                // パネルを開いた時に自動でログをコピー
+                copyDebugLogs();
             } else {
                 panel.style.display = 'none';
             }
@@ -2087,15 +2226,33 @@
 
         // デバッグログのコピー
         async function copyDebugLogs() {
+            if (debugLogs.length === 0) {
+                debugLog('コピーするログがありません', 'warn');
+                return;
+            }
+            
             const logText = debugLogs.map(log => 
                 `[${log.time}] ${log.type.toUpperCase()}: ${log.message}`
             ).join('\n');
             
+            debugLog(`${debugLogs.length}件のログをコピー中...`, 'info');
+            
             try {
                 await navigator.clipboard.writeText(logText);
-                debugLog('ログをクリップボードにコピーしました', 'success');
+                debugLog('✅ ログをクリップボードにコピーしました', 'success');
+                // 通知も表示
+                showNotification('デバッグログをコピーしました！');
             } catch (err) {
-                debugLog('ログのコピーに失敗しました: ' + err.message, 'error');
+                debugLog('❌ ログのコピーに失敗: ' + err.message, 'error');
+                // フォールバック: textarea作成してコピー
+                const textarea = document.createElement('textarea');
+                textarea.value = logText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                debugLog('代替方法でコピー完了', 'success');
+                showNotification('デバッグログをコピーしました（代替方法）');
             }
         }
 
@@ -2186,22 +2343,72 @@
 
         // データの保存（localStorage）
         function savePrompts() {
+            // 画像データを除外してlocalStorageに保存
+            const promptsForStorage = prompts.map(prompt => {
+                const { image, ...promptWithoutImage } = prompt;
+                return promptWithoutImage;
+            });
+            
             const saveData = {
-                prompts: prompts,
+                prompts: promptsForStorage,
                 tags: Array.from(allTags)
             };
-            localStorage.setItem('novel_ai_prompts', JSON.stringify(saveData));
+            
+            debugLog(`🔧 画像除外後のプロンプト準備完了`, 'info');
+            debugLog(`localStorage保存実行: プロンプト${prompts.length}件、タグ${allTags.size}個`, 'info');
+            try {
+                const jsonString = JSON.stringify(saveData);
+                debugLog(`JSON文字列長: ${jsonString.length}文字 (${(jsonString.length/1024/1024).toFixed(2)}MB)`, 'info');
+                
+                // localStorageサイズ制限チェック
+                try {
+                    localStorage.setItem('test_size', jsonString);
+                    localStorage.removeItem('test_size');
+                    debugLog(`✅ サイズテスト成功: localStorage制限内`, 'success');
+                } catch (sizeError) {
+                    debugLog(`❌ サイズテスト失敗: ${sizeError.message}`, 'error');
+                    debugLog(`🚨 CRITICAL: データが大きすぎます！画像データを削減してください`, 'error');
+                    return;
+                }
+                
+                localStorage.setItem('novel_ai_prompts', jsonString);
+                
+                // 保存後に即座に読み込んで確認
+                const verification = localStorage.getItem('novel_ai_prompts');
+                if (verification) {
+                    const verifyData = JSON.parse(verification);
+                    debugLog(`✅ 保存確認: プロンプト${verifyData.prompts.length}件`, 'success');
+                    
+                    // 今保存したプロンプトが含まれているかチェック
+                    const latestPrompt = verifyData.prompts[0];
+                    if (latestPrompt && latestPrompt.title === saveData.prompts[0].title) {
+                        debugLog(`✅ 最新プロンプト確認: "${latestPrompt.title}" 保存済み`, 'success');
+                    } else {
+                        debugLog(`❌ 最新プロンプト確認失敗`, 'error');
+                    }
+                } else {
+                    debugLog('❌ 保存確認失敗: データが見つからない', 'error');
+                }
+                
+                debugLog('localStorage保存成功', 'success');
+            } catch (err) {
+                debugLog('localStorage保存エラー: ' + err.message, 'error');
+                debugLog('エラー詳細: ' + err.stack, 'error');
+            }
         }
 
         // データの読み込み（localStorage）
         function loadPrompts() {
+            debugLog('=== localStorage読み込み開始 ===', 'info');
             const saved = localStorage.getItem('novel_ai_prompts');
             if (saved) {
+                debugLog('localStorage からデータ発見', 'info');
                 try {
                     const data = JSON.parse(saved);
                     
                     if (data.prompts) {
                         prompts = data.prompts;
+                        debugLog(`🔧 プロンプト読み込み: ${prompts.length}件（画像データは除外済み）`, 'success');
                         // 日時の文字列をDateオブジェクトに変換
                         prompts.forEach(prompt => {
                             if (typeof prompt.timestamp === 'string') {
@@ -2230,10 +2437,14 @@
                     }
                 } catch (err) {
                     console.error('データの読み込みに失敗しました:', err);
+                    debugLog('localStorage読み込みエラー: ' + err.message, 'error');
                     prompts = [];
                     allTags = new Set();
                 }
+            } else {
+                debugLog('localStorage にデータなし（初回起動）', 'info');
             }
+            debugLog('=== localStorage読み込み終了 ===', 'info');
         }
 
         // 日時のフォーマット

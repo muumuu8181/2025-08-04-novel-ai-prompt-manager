@@ -1047,7 +1047,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="version-badge">v0.6</div>
+        <div class="version-badge">v0.603</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
         </div>
@@ -1483,13 +1483,19 @@
             
             // タグをグローバルセットに追加
             currentTags.forEach(tag => allTags.add(tag));
+            debugLog(`タグをグローバルセットに追加: [${Array.from(currentTags).join(', ')}]`, 'info');
             
+            debugLog('savePrompts()呼び出し前のプロンプト数: ' + prompts.length, 'info');
             savePrompts();
+            debugLog('savePrompts()呼び出し後のプロンプト数: ' + prompts.length, 'info');
+            
             clearInputs();
             displayPrompts();
             updateStats();
             updateTagsDisplay();
             updateSaveButtons();
+            
+            debugLog('=== プロンプト保存完了 ===', 'success');
         }
 
         // 入力フィールドのクリア
@@ -2190,18 +2196,27 @@
                 prompts: prompts,
                 tags: Array.from(allTags)
             };
-            localStorage.setItem('novel_ai_prompts', JSON.stringify(saveData));
+            debugLog(`localStorage保存実行: プロンプト${prompts.length}件、タグ${allTags.size}個`, 'info');
+            try {
+                localStorage.setItem('novel_ai_prompts', JSON.stringify(saveData));
+                debugLog('localStorage保存成功', 'success');
+            } catch (err) {
+                debugLog('localStorage保存エラー: ' + err.message, 'error');
+            }
         }
 
         // データの読み込み（localStorage）
         function loadPrompts() {
+            debugLog('=== localStorage読み込み開始 ===', 'info');
             const saved = localStorage.getItem('novel_ai_prompts');
             if (saved) {
+                debugLog('localStorage からデータ発見', 'info');
                 try {
                     const data = JSON.parse(saved);
                     
                     if (data.prompts) {
                         prompts = data.prompts;
+                        debugLog(`プロンプト読み込み: ${prompts.length}件`, 'success');
                         // 日時の文字列をDateオブジェクトに変換
                         prompts.forEach(prompt => {
                             if (typeof prompt.timestamp === 'string') {
@@ -2230,10 +2245,14 @@
                     }
                 } catch (err) {
                     console.error('データの読み込みに失敗しました:', err);
+                    debugLog('localStorage読み込みエラー: ' + err.message, 'error');
                     prompts = [];
                     allTags = new Set();
                 }
+            } else {
+                debugLog('localStorage にデータなし（初回起動）', 'info');
             }
+            debugLog('=== localStorage読み込み終了 ===', 'info');
         }
 
         // 日時のフォーマット
