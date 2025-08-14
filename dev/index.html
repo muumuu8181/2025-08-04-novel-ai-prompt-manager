@@ -1043,6 +1043,91 @@
                 padding: 4px 8px;
             }
         }
+
+        /* タブ機能のスタイル */
+        .tab-container {
+            display: flex;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-button:first-child {
+            border-right: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Novel AI タブ（現在の色） */
+        .tab-button[data-mode="novelai"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-button[data-mode="novelai"]:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        /* Claude Code タブ（オレンジ寄り茶色） */
+        .tab-button[data-mode="claudecode"] {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+        }
+
+        .tab-button[data-mode="claudecode"]:hover {
+            background: linear-gradient(135deg, #7A3E0F 0%, #C0561A 100%);
+        }
+
+        /* アクティブなタブ - 大幅強調 */
+        .tab-button.active {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 3px solid #FFD700 !important; /* 金色のボーダー */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* アクティブタブに追加の装飾 */
+        .tab-button.active::before {
+            content: '✨';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FFD700;
+            color: #333;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 非アクティブなタブ - より明確な違い */
+        .tab-button:not(.active) {
+            opacity: 0.5;
+            filter: grayscale(30%);
+            transform: scale(0.95);
+        }
+
+        /* 非アクティブタブのホバー時 */
+        .tab-button:not(.active):hover {
+            opacity: 0.8;
+            filter: grayscale(0%);
+            transform: scale(1.0);
+        }
     </style>
 </head>
 <body>
@@ -1050,6 +1135,15 @@
         <div class="version-badge">v0.603-dev.1</div>
         <div class="header">
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
+            <!-- タブ機能追加 -->
+            <div class="tab-container">
+                <button class="tab-button active" data-mode="novelai" onclick="switchMode('novelai')">
+                    🎨 Novel AI
+                </button>
+                <button class="tab-button" data-mode="claudecode" onclick="switchMode('claudecode')">
+                    💻 Claude Code
+                </button>
+            </div>
         </div>
 
         <div class="controls">
@@ -1730,8 +1824,21 @@
             updatePotionPreview();
             updateSaveButtons();
             
+            // メインプロンプトを自動でクリップボードにコピー
+            if (prompt.mainPrompt) {
+                try {
+                    navigator.clipboard.writeText(prompt.mainPrompt).then(() => {
+                        debugLog(`メインプロンプトをクリップボードにコピー成功`, 'success');
+                    }).catch(err => {
+                        debugLog(`クリップボードコピーエラー: ${err}`, 'warning');
+                    });
+                } catch (err) {
+                    debugLog(`クリップボードAPIエラー: ${err}`, 'warning');
+                }
+            }
+            
             // 成功メッセージ
-            showNotification(`"${prompt.title || '無題'}" を編集モードで復元しました！${prompt.source === 'potion' ? ' 🧪' : ''}`);
+            showNotification(`"${prompt.title || '無題'}" を編集モードで復元しました！📋メインプロンプトをクリップボードにコピー${prompt.source === 'potion' ? ' 🧪' : ''}`);
             
             // 入力エリアまでスクロール
             document.querySelector('.title-section').scrollIntoView({ behavior: 'smooth' });

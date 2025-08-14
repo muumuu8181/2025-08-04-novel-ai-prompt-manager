@@ -97,12 +97,12 @@ studio lighting, soft colors
 ## 📂 フォルダ構成
 ```
 2025-08-04-novel-ai-prompt-manager/
-├── 🛡️ core/               # 確定版・安定版
-│   └── index.html         # v0.6 - 動作保証済み（絶対にダウングレード禁止）
-├── 🧪 dev/                # 開発版・テスト版
-│   └── index.html         # v0.x-dev.x - 検証中の機能
-├── 🔧 src/                # 現在の作業版
-│   └── index.html         # v0.x.xx - 日々の開発・実験
+├── 🛡️ core/               # ✅ 現在稼働中の安定版
+│   └── index.html         # v0.603 - 動作確認済み・本番利用中
+├── 🧪 dev/                # ⚠️ 調査予定（動作未確認）
+│   └── index.html         # v0.603-dev.1 - 今後調査対象
+├── 🔧 src/                # ⚠️ 調査予定（動作未確認）
+│   └── index.html         # v0.620-final - 今後調査対象
 ├── tests/                 # テストファイル（将来用）
 ├── prompts/               # 外部テキストファイル用フォルダ
 │   └── (*.txt files)      # プロンプトテキストファイル

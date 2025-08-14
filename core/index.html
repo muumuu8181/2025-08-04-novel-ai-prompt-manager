@@ -247,8 +247,91 @@
 
         .btn-clear:hover {
             background: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* タブ機能のスタイル */
+        .tab-container {
+            display: flex;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-button:first-child {
+            border-right: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Novel AI タブ（現在の色） */
+        .tab-button[data-mode="novelai"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-button[data-mode="novelai"]:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        /* Claude Code タブ（オレンジ寄り茶色） */
+        .tab-button[data-mode="claudecode"] {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+        }
+
+        .tab-button[data-mode="claudecode"]:hover {
+            background: linear-gradient(135deg, #7A3E0F 0%, #C0561A 100%);
+        }
+
+        /* アクティブなタブ - 大幅強調 */
+        .tab-button.active {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 3px solid #FFD700 !important; /* 金色のボーダー */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* アクティブタブに追加の装飾 */
+        .tab-button.active::before {
+            content: '✨';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FFD700;
+            color: #333;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 非アクティブなタブ - より明確な違い */
+        .tab-button:not(.active) {
+            opacity: 0.5;
+            filter: grayscale(30%);
+            transform: scale(0.95);
+        }
+
+        /* 非アクティブタブのホバー時 */
+        .tab-button:not(.active):hover {
+            opacity: 0.8;
+            filter: grayscale(0%);
+            transform: scale(1.0);
         }
 
         .title-input-row {
@@ -1049,7 +1132,17 @@
     <div class="container">
         <div class="version-badge">v0.603</div>
         <div class="header">
-            <h1>🎨 Novel AI プロンプト管理アプリ</h1>
+            <h1 id="appTitle">🎨 Novel AI プロンプト管理アプリ</h1>
+            
+            <!-- タブ切り替え -->
+            <div class="tab-container">
+                <button class="tab-button active" data-mode="novelai" onclick="switchMode('novelai')">
+                    🎨 Novel AI
+                </button>
+                <button class="tab-button" data-mode="claudecode" onclick="switchMode('claudecode')">
+                    💻 Claude Code
+                </button>
+            </div>
         </div>
 
         <div class="controls">
@@ -1065,28 +1158,28 @@
             <div class="input-section unified-prompt-section">
                 <div class="prompt-row">
                     <div class="prompt-field">
-                        <h3>🌟 メイン</h3>
+                        <h3 id="mainLabel">🌟 メイン</h3>
                         <textarea id="mainPrompt" class="unified-prompt main-prompt" placeholder="背景、設定、品質指定など..."></textarea>
                         <button onclick="copyIndividualPrompt('main')" class="copy-btn-side">📋</button>
                     </div>
                 </div>
                 <div class="prompt-row">
                     <div class="prompt-field">
-                        <h3>👤 1人目</h3>
+                        <h3 id="option1Label">👤 1人目</h3>
                         <textarea id="character1" class="unified-prompt" placeholder="1人目のキャラクター詳細..."></textarea>
                         <button onclick="copyIndividualPrompt('char1')" class="copy-btn-side">📋</button>
                     </div>
                 </div>
                 <div class="prompt-row">
                     <div class="prompt-field">
-                        <h3>👥 2人目</h3>
+                        <h3 id="option2Label">👥 2人目</h3>
                         <textarea id="character2" class="unified-prompt" placeholder="2人目のキャラクター詳細..."></textarea>
                         <button onclick="copyIndividualPrompt('char2')" class="copy-btn-side">📋</button>
                     </div>
                 </div>
                 <div class="prompt-row">
                     <div class="prompt-field">
-                        <h3>👥+ 3〜6人目</h3>
+                        <h3 id="option3Label">👥+ 3〜6人目</h3>
                         <textarea id="character3to6" class="unified-prompt" placeholder="3〜6人目の追加キャラクター..."></textarea>
                         <button onclick="copyIndividualPrompt('char3to6')" class="copy-btn-side">📋</button>
                     </div>
@@ -1486,7 +1579,7 @@
             debugLog(`タグをグローバルセットに追加: [${Array.from(currentTags).join(', ')}]`, 'info');
             
             debugLog('savePrompts()呼び出し前のプロンプト数: ' + prompts.length, 'info');
-            savePrompts();
+            savePromptsForMode();
             debugLog('savePrompts()呼び出し後のプロンプト数: ' + prompts.length, 'info');
             
             clearInputs();
@@ -1538,7 +1631,7 @@
                 
                 currentTags.forEach(tag => allTags.add(tag));
                 
-                savePrompts();
+                savePromptsForMode();
                 displayPrompts();
                 updateStats();
                 
@@ -1730,8 +1823,21 @@
             updatePotionPreview();
             updateSaveButtons();
             
+            // メインプロンプトを自動でクリップボードにコピー
+            if (prompt.mainPrompt) {
+                try {
+                    navigator.clipboard.writeText(prompt.mainPrompt).then(() => {
+                        debugLog(`メインプロンプトをクリップボードにコピー成功`, 'success');
+                    }).catch(err => {
+                        debugLog(`クリップボードコピーエラー: ${err}`, 'warning');
+                    });
+                } catch (err) {
+                    debugLog(`クリップボードAPIエラー: ${err}`, 'warning');
+                }
+            }
+            
             // 成功メッセージ
-            showNotification(`"${prompt.title || '無題'}" を編集モードで復元しました！${prompt.source === 'potion' ? ' 🧪' : ''}`);
+            showNotification(`"${prompt.title || '無題'}" を編集モードで復元しました！📋メインプロンプトをクリップボードにコピー${prompt.source === 'potion' ? ' 🧪' : ''}`);
             
             // 入力エリアまでスクロール
             document.querySelector('.title-section').scrollIntoView({ behavior: 'smooth' });
@@ -1759,7 +1865,7 @@
             if (!confirm('このプロンプトを削除しますか？')) return;
 
             prompts = prompts.filter(p => p.id != id);
-            savePrompts();
+            savePromptsForMode();
             displayPrompts();
             updateStats();
             
@@ -1953,7 +2059,7 @@
                     }
                 }
                 
-                savePrompts();
+                savePromptsForMode();
                 displayPrompts();
                 updateStats();
                 updateTagsDisplay();
@@ -2159,7 +2265,7 @@
                                 importedData.tags.forEach(tag => allTags.add(tag));
                             }
                             
-                            savePrompts();
+                            savePromptsForMode();
                             displayPrompts();
                             updateStats();
                             updateTagsDisplay();
@@ -2183,7 +2289,7 @@
             prompts = [];
             allTags.clear();
             currentTags.clear();
-            savePrompts();
+            savePromptsForMode();
             displayPrompts();
             updateStats();
             updateTagsDisplay();
@@ -2205,8 +2311,15 @@
             }
         }
 
-        // データの読み込み（localStorage）
+        // データの読み込み（localStorage）- 初期化用
         function loadPrompts() {
+            debugLog('=== localStorage読み込み開始 ===', 'info');
+            // 現在のモードでデータを読み込み
+            loadPromptsForMode(currentMode);
+        }
+
+        // 従来のloadPrompts関数（互換性維持用）
+        function loadPromptsLegacy() {
             debugLog('=== localStorage読み込み開始 ===', 'info');
             const saved = localStorage.getItem('novel_ai_prompts');
             if (saved) {
@@ -2227,7 +2340,10 @@
                                 prompt.character1 = '';
                                 prompt.character2 = '';
                                 prompt.character3to6 = '';
-                                prompt.mainPrompt = prompt.content || '';
+                            }
+                            // mainPromptが存在しない場合のみcontentから移行
+                            if (!prompt.mainPrompt && prompt.content) {
+                                prompt.mainPrompt = prompt.content;
                             }
                             if (!prompt.tags) {
                                 prompt.tags = [];
@@ -2289,6 +2405,87 @@
             setTimeout(() => {
                 notification.remove();
             }, 3000);
+        }
+
+        // タブ切り替え機能
+        let currentMode = 'novelai'; // デフォルトはNovel AIモード
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // タブボタンのアクティブ状態を更新
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+            
+            // アプリタイトルとラベルを更新
+            const appTitle = document.getElementById('appTitle');
+            const mainLabel = document.getElementById('mainLabel');
+            const option1Label = document.getElementById('option1Label');
+            const option2Label = document.getElementById('option2Label');
+            const option3Label = document.getElementById('option3Label');
+            
+            if (mode === 'novelai') {
+                appTitle.textContent = '🎨 Novel AI プロンプト管理アプリ';
+                mainLabel.textContent = '🌟 メイン';
+                option1Label.textContent = '👤 1人目';
+                option2Label.textContent = '👥 2人目';
+                option3Label.textContent = '👥+ 3〜6人目';
+            } else if (mode === 'claudecode') {
+                appTitle.textContent = '💻 Claude Code プロンプト管理アプリ';
+                mainLabel.textContent = '💻 メイン';
+                option1Label.textContent = '⚙️ オプション1';
+                option2Label.textContent = '🔧 オプション2';
+                option3Label.textContent = '🛠️ オプション3';
+            }
+            
+            // モード別のデータを読み込み
+            loadPromptsForMode(mode);
+            
+            showNotification(`${mode === 'novelai' ? 'Novel AI' : 'Claude Code'}モードに切り替えました`);
+        }
+
+        // モード別データ読み込み
+        function loadPromptsForMode(mode) {
+            const storageKey = mode === 'novelai' ? 'novel_ai_prompts' : 'claude_code_prompts';
+            const saved = localStorage.getItem(storageKey);
+            
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    prompts = data.prompts || [];
+                    allTags = new Set(data.tags || []);
+                } catch (err) {
+                    debugLog('データ読み込みエラー: ' + err.message, 'error');
+                    prompts = [];
+                    allTags = new Set();
+                }
+            } else {
+                prompts = [];
+                allTags = new Set();
+            }
+            
+            // 表示を更新
+            displayPrompts();
+            updateStats();
+            debugLog(`${mode}モードのデータを読み込み: ${prompts.length}件`, 'info');
+        }
+
+        // モード別データ保存（既存のsavePrompts関数を修正）
+        function savePromptsForMode() {
+            const storageKey = currentMode === 'novelai' ? 'novel_ai_prompts' : 'claude_code_prompts';
+            const saveData = {
+                prompts: prompts,
+                tags: Array.from(allTags)
+            };
+            debugLog(`${currentMode}モードでlocalStorage保存実行: プロンプト${prompts.length}件、タグ${allTags.size}個`, 'info');
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(saveData));
+                debugLog('localStorage保存成功', 'success');
+            } catch (err) {
+                debugLog('localStorage保存エラー: ' + err.message, 'error');
+            }
         }
 
         // アニメーション用CSS（動的に追加）
