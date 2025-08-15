@@ -2451,11 +2451,8 @@
 
         // データの保存（localStorage）
         function savePrompts() {
-            // 画像データを除外してlocalStorageに保存
-            const promptsForStorage = prompts.map(prompt => {
-                const { image, ...promptWithoutImage } = prompt;
-                return promptWithoutImage;
-            });
+            // 画像データも含めてlocalStorageに保存（Issue #001修正）
+            const promptsForStorage = prompts;
             
             const saveData = {
                 prompts: promptsForStorage,
