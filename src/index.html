@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novel AI プロンプト管理アプリ</title>
+    
+    <!-- Firebase SDK v9 -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getDatabase, ref, push, onValue, set, remove } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        // Firebase設定
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5PXKChizYDCXF_GJ4KL6Ylq9K5hCPXWE",
+            authDomain: "shares-b1b97.firebaseapp.com",
+            databaseURL: "https://shares-b1b97-default-rtdb.firebaseio.com",
+            projectId: "shares-b1b97",
+            storageBucket: "shares-b1b97.firebasestorage.app",
+            messagingSenderId: "38311063248",
+            appId: "1:38311063248:web:0d2d5726d12b305b24b8d5"
+        };
+
+        // Firebase初期化
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // グローバルに公開
+        window.firebase = { database, auth, googleProvider, ref, push, onValue, set, remove, signInWithPopup, signOut, onAuthStateChanged };
+    </script>
     <style>
         * {
             margin: 0;
@@ -1044,6 +1071,102 @@
             }
         }
 
+        /* 認証関連スタイル */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .google-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 15px 20px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .google-login-btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         /* タブ機能のスタイル */
         .tab-container {
             display: flex;
@@ -1131,9 +1254,32 @@
     </style>
 </head>
 <body>
+    <!-- 認証オーバーレイ -->
+    <div id="authOverlay" class="auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <h2 class="auth-title">🔐 ログインが必要です</h2>
+            <p class="auth-subtitle">プロンプトデータをクラウドに安全に保存するため、Googleアカウントでログインしてください</p>
+            <button id="googleLoginBtn" class="google-login-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Googleでログイン
+            </button>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="version-badge">v0.620-final</div>
+        <div class="version-badge">v0.8-Firebase</div>
         <div class="header">
+            <!-- ユーザー情報表示 -->
+            <div id="userInfo" class="user-info" style="display: none;">
+                <img id="userAvatar" class="user-avatar" src="" alt="ユーザーアバター">
+                <span id="userName" class="user-name"></span>
+                <button id="logoutBtn" class="logout-btn">ログアウト</button>
+            </div>
             <h1>🎨 Novel AI プロンプト管理アプリ</h1>
             <!-- タブ機能追加 -->
             <div class="tab-container">
@@ -1309,12 +1455,172 @@
         let currentEditingId = null; // 現在編集中のプロンプトID
         let debugLogs = []; // デバッグログ保存用
         let currentMode = 'novelai'; // 現在のモード (novelai/claudecode)
+        
+        // Firebase関連変数
+        let currentUser = null;
+        let firebaseReady = false;
+
+        // Firebase認証関数
+        async function initializeAuth() {
+            try {
+                const { auth, onAuthStateChanged, signInWithPopup, signOut, googleProvider } = window.firebase;
+                
+                // 認証状態監視
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        showUserInfo(user);
+                        hideAuthOverlay();
+                        loadUserData();
+                    } else {
+                        showAuthOverlay();
+                        hideUserInfo();
+                    }
+                });
+                
+                // ログインボタンイベント
+                document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+                    try {
+                        await signInWithPopup(auth, googleProvider);
+                    } catch (error) {
+                        console.error('ログインエラー:', error);
+                        alert('ログインに失敗しました: ' + error.message);
+                    }
+                });
+                
+                // ログアウトボタンイベント
+                document.getElementById('logoutBtn').addEventListener('click', async () => {
+                    try {
+                        await signOut(auth);
+                    } catch (error) {
+                        console.error('ログアウトエラー:', error);
+                    }
+                });
+                
+                firebaseReady = true;
+                debugLog('Firebase認証初期化完了', 'success');
+                
+            } catch (error) {
+                console.error('Firebase初期化エラー:', error);
+                debugLog('Firebase初期化エラー: ' + error.message, 'error');
+                // Firebaseが使えない場合はlocalStorageモードで動作
+                firebaseReady = false;
+                hideAuthOverlay();
+                loadPrompts(); // localStorage から読み込み
+            }
+        }
+        
+        function showAuthOverlay() {
+            document.getElementById('authOverlay').style.display = 'flex';
+        }
+        
+        function hideAuthOverlay() {
+            document.getElementById('authOverlay').style.display = 'none';
+        }
+        
+        function showUserInfo(user) {
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            
+            userAvatar.src = user.photoURL || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiM2NjdlZWEiLz4KPHR0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTRweCIgZm9udC13ZWlnaHQ9ImJvbGQiPkEKPC90ZXh0Pgo8L3N2Zz4K';
+            userName.textContent = user.displayName || user.email;
+            userInfo.style.display = 'flex';
+        }
+        
+        function hideUserInfo() {
+            document.getElementById('userInfo').style.display = 'none';
+        }
+
+        // Firebase Realtime Database操作関数
+        async function loadUserData() {
+            if (!firebaseReady || !currentUser) {
+                debugLog('Firebase未準備またはユーザー未ログイン - localStorage使用', 'warning');
+                loadPrompts();
+                return;
+            }
+            
+            try {
+                const { database, ref, onValue } = window.firebase;
+                const userRef = ref(database, `users/${currentUser.uid}/prompts`);
+                
+                debugLog('=== Firebase読み込み開始 ===', 'info');
+                debugLog(`ユーザーID: ${currentUser.uid}`, 'info');
+                
+                onValue(userRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        prompts = Object.values(data);
+                        // タグも復元
+                        allTags = new Set();
+                        prompts.forEach(prompt => {
+                            if (prompt.tags) {
+                                prompt.tags.forEach(tag => allTags.add(tag));
+                            }
+                            // 日時復元
+                            if (typeof prompt.timestamp === 'string') {
+                                prompt.timestamp = new Date(prompt.timestamp);
+                            }
+                        });
+                        debugLog(`🔥 Firebase読み込み完了: ${prompts.length}件`, 'success');
+                    } else {
+                        prompts = [];
+                        allTags = new Set();
+                        debugLog('Firebase: データなし（新規ユーザー）', 'info');
+                    }
+                    
+                    displayPrompts();
+                    updateStats();
+                    updateTagsDisplay();
+                }, (error) => {
+                    console.error('Firebase読み込みエラー:', error);
+                    debugLog('Firebase読み込みエラー - localStorage使用', 'error');
+                    loadPrompts(); // フォールバック
+                });
+                
+            } catch (error) {
+                console.error('Firebase操作エラー:', error);
+                debugLog('Firebase操作エラー - localStorage使用', 'error');
+                loadPrompts();
+            }
+        }
+        
+        async function saveUserData() {
+            if (!firebaseReady || !currentUser) {
+                debugLog('Firebase未準備 - localStorage保存', 'warning');
+                savePrompts();
+                return;
+            }
+            
+            try {
+                const { database, ref, set } = window.firebase;
+                const userRef = ref(database, `users/${currentUser.uid}/prompts`);
+                
+                // プロンプトをオブジェクト形式で保存（キーはプロンプトID）
+                const promptsObject = {};
+                prompts.forEach(prompt => {
+                    promptsObject[prompt.id] = prompt;
+                });
+                
+                await set(userRef, promptsObject);
+                debugLog(`🔥 Firebase保存完了: ${prompts.length}件`, 'success');
+                
+                // バックアップとしてlocalStorageにも保存
+                savePrompts();
+                
+            } catch (error) {
+                console.error('Firebase保存エラー:', error);
+                debugLog('Firebase保存エラー - localStorage保存', 'error');
+                savePrompts(); // フォールバック
+            }
+        }
 
         // ページ読み込み時の初期化
         window.onload = function() {
-            loadPrompts();
-            displayPrompts();
-            updateStats();
+            // Firebase初期化を最優先で実行
+            setTimeout(initializeAuth, 100); // Firebase SDKの読み込み待ち
+            
+            // UI初期化
             updateTagsDisplay();
             
             // イベントリスナー設定
@@ -1607,8 +1913,15 @@
             debugLog(`タグをグローバルセットに追加: [${Array.from(currentTags).join(', ')}]`, 'info');
             
             debugLog('savePrompts()呼び出し前のプロンプト数: ' + prompts.length, 'info');
-            savePrompts();
-            debugLog('savePrompts()呼び出し後のプロンプト数: ' + prompts.length, 'info');
+            
+            // Firebaseが利用可能ならFirebaseに保存、そうでなければlocalStorage
+            if (firebaseReady && currentUser) {
+                saveUserData();
+            } else {
+                savePrompts();
+            }
+            
+            debugLog('保存処理呼び出し後のプロンプト数: ' + prompts.length, 'info');
             
             clearInputs();
             displayPrompts();
@@ -1955,7 +2268,14 @@
             if (!confirm('このプロンプトを削除しますか？')) return;
 
             prompts = prompts.filter(p => p.id != id);
-            savePrompts();
+            
+            // Firebaseが利用可能ならFirebaseに保存、そうでなければlocalStorage
+            if (firebaseReady && currentUser) {
+                saveUserData();
+            } else {
+                savePrompts();
+            }
+            
             displayPrompts();
             updateStats();
             
